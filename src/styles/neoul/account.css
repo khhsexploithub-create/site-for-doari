@@ -1,0 +1,291 @@
+/* 로그인 · 회원가입 — 왼쪽 너울 판 + 오른쪽 입력 카드 */
+
+.nu .account-shell {
+  width: 100%;
+  min-height: 100vh;
+  max-width: 1056px;
+  margin: 0 auto;
+  padding: 48px 32px 32px;
+  box-sizing: border-box;
+  background: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-content: center;
+  align-items: stretch;
+  gap: 20px;
+}
+
+/* 회원가입은 입력칸이 길어서 너울 판을 위에 붙여 둔다 */
+.nu .account-shell:has(#signUpForm) {
+  align-items: start;
+}
+
+.nu .account-shell:has(#signUpForm) .account-hero {
+  position: sticky;
+  top: 48px;
+}
+
+/* ---------- 너울 판 ---------- */
+
+.nu .account-hero {
+  view-transition-name: nu-head;
+  position: relative;
+  overflow: hidden;
+  min-height: 520px;
+  padding: 52px;
+  box-sizing: border-box;
+  border-radius: var(--nu-r-head);
+  background: var(--nu-lavender);
+  box-shadow: var(--nu-shadow-head);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.nu .account-hero > *:not(.account-hero-wave) {
+  position: relative;
+  z-index: 2;
+}
+
+.nu .account-hero-wave {
+  position: absolute;
+  top: -60px;
+  right: -70px;
+  width: 340px;
+  z-index: 1;
+  pointer-events: none;
+  animation: nu-float 9s ease-in-out infinite;
+}
+
+.nu .account-hero-title {
+  margin: 14px 0 0;
+  font-size: 88px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  color: var(--nu-accent);
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.7), 0 12px 28px rgba(43, 40, 112, 0.22);
+}
+
+.nu .account-hero-sub {
+  margin: 14px 0 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2e2b55;
+}
+
+.nu .account-hero-desc {
+  margin: 6px 0 0;
+  max-width: 300px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #55527a;
+}
+
+/* ---------- 입력 카드 ---------- */
+
+.nu .account-card {
+  width: auto;
+  padding: 44px;
+  box-sizing: border-box;
+  border: 1px solid var(--nu-line);
+  border-radius: var(--nu-r-card);
+  background: #ffffff;
+  box-shadow: var(--nu-shadow-card);
+  justify-content: center;
+  gap: 16px;
+}
+
+.nu .account-title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--nu-ink);
+}
+
+.nu .account-lead {
+  margin: -8px 0 6px;
+  font-size: 15px;
+  color: var(--nu-ink-3);
+}
+
+.nu .account-card label {
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nu-ink-2);
+}
+
+.nu .account-card input {
+  min-height: 52px;
+  padding: 0 16px;
+  border: 1px solid var(--nu-field);
+  border-radius: var(--nu-r-field);
+  background: #ffffff;
+  font-size: 15px;
+}
+
+.nu .account-card input:focus {
+  border-color: var(--nu-accent);
+  box-shadow: 0 0 0 4px rgba(43, 40, 112, 0.1);
+}
+
+.nu .account-card .password-field input {
+  padding-right: 52px;
+}
+
+.nu .account-card button[type="submit"] {
+  min-height: 54px;
+  margin-top: 6px;
+  padding: 0 18px;
+  border-radius: 16px;
+  background: var(--nu-accent);
+  font-size: 16px;
+  font-weight: 800;
+  box-shadow: var(--nu-shadow-btn);
+}
+
+.nu .account-card button[type="submit"]:hover:not(:disabled) {
+  background: var(--nu-accent-hover);
+}
+
+.nu .account-card button[type="submit"]:disabled {
+  background: #a9a8c4;
+  box-shadow: none;
+}
+
+.nu .account-hint {
+  color: var(--nu-ink-3);
+}
+
+.nu .account-message {
+  color: var(--nu-alert);
+}
+
+.nu .account-note {
+  color: var(--nu-ink-3);
+}
+
+.nu .account-switch {
+  color: var(--nu-ink-3);
+}
+
+.nu .account-switch a {
+  color: var(--nu-accent);
+}
+
+.nu .account-browse {
+  margin-top: 4px;
+  padding-top: 18px;
+  border-top: 1px solid var(--nu-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--nu-ink-2);
+  transition: color 0.2s ease, gap 0.2s var(--nu-ease);
+}
+
+.nu .account-browse:hover {
+  gap: 8px;
+  color: var(--nu-accent);
+}
+
+.nu .account-foot {
+  grid-column: 1 / -1;
+  margin: 8px 0 0;
+  font-size: 13px;
+  text-align: center;
+  color: var(--nu-ink-3);
+}
+
+/* 회원가입: 동아리 고르기 */
+.nu .club-choice-title {
+  font-size: 13px;
+  color: var(--nu-ink-2);
+}
+
+.nu .club-choice-title em {
+  color: var(--nu-alert);
+}
+
+.nu .club-choice-group {
+  gap: 6px;
+}
+
+:where(.nu) .club-choice {
+  min-height: 40px;
+  padding: 0 8px;
+  border: 1px solid var(--nu-field);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--nu-ink-2);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+:where(.nu) .club-choice:hover:not(:disabled) {
+  border-color: #c9cadb;
+  background: #fafafc;
+}
+
+/* ---------- 모바일 ---------- */
+
+@media (max-width: 860px) {
+  .nu .account-shell {
+    min-height: 0;
+    padding: 0 16px 28px;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 0;
+  }
+
+  .nu .account-hero {
+    min-height: 0;
+    margin: 0 -16px;
+    padding: 120px 24px 52px;
+    border-radius: 0 0 var(--nu-r-head) var(--nu-r-head);
+    box-shadow: none;
+  }
+
+  .nu .account-hero-wave {
+    top: -10px;
+    right: -50px;
+    width: 250px;
+    opacity: 0.6;
+  }
+
+  .nu .account-hero-title {
+    margin-top: 8px;
+    font-size: 46px;
+    text-shadow: none;
+  }
+
+  .nu .account-hero-sub {
+    margin-top: 6px;
+    font-size: 16px;
+  }
+
+  .nu .account-hero-desc {
+    display: none;
+  }
+
+  .nu .account-card {
+    position: relative;
+    z-index: 3;
+    margin-top: -28px;
+    padding: 24px 20px;
+    border-radius: 24px;
+    gap: 14px;
+  }
+
+  .nu .account-title {
+    font-size: 22px;
+  }
+
+  .nu .account-foot {
+    margin-top: 24px;
+  }
+}

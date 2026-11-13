@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>행사 안내 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu nu-board">
+  <main class="nu-wrap feature-page nu-enter">
+    <a href="/calendar.html" class="back-link">← 캘린더로 돌아가기</a>
+
+    <article id="eventArticle" class="activity-post event-post" hidden>
+
+      <header class="activity-post-head">
+        <div id="eventClubTagBox" class="event-post-club"></div>
+
+        <h1 id="eventTitle">행사 이름 없음</h1>
+
+        <div class="activity-post-meta">
+          <time class="activity-post-date" id="eventDate"></time>
+          <span id="eventTime"></span>
+          <span id="eventLocation"></span>
+        </div>
+
+        <div class="activity-post-actions">
+          <a href="/calendar.html" class="secondary activity-post-back">목록으로</a>
+          <button id="eventDeleteButton" type="button" class="danger" hidden>삭제</button>
+        </div>
+      </header>
+
+      <figure id="eventPosterFigure" class="event-post-poster" hidden>
+        <img id="eventPoster" alt="행사 포스터">
+      </figure>
+
+      <section class="event-post-block" aria-labelledby="eventPromotionHeading">
+        <h2 id="eventPromotionHeading">홍보 내용</h2>
+        <p class="activity-post-content" id="eventPromotion"></p>
+      </section>
+
+      <section class="event-post-block" aria-labelledby="eventPlanHeading">
+        <h2 id="eventPlanHeading">행사 계획</h2>
+        <p class="activity-post-content" id="eventPlan"></p>
+      </section>
+
+      <section class="activity-comments" aria-labelledby="eventCommentsHeading">
+
+        <h2 id="eventCommentsHeading">
+          의견 <span id="eventCommentCount">0</span>
+        </h2>
+
+        <p class="subtext">행사에 대한 제안이나 피드백을 남겨주세요.</p>
+
+        <ul id="eventCommentList" class="activity-comment-list" aria-live="polite"></ul>
+
+        <form id="eventCommentForm" class="activity-comment-form">
+          <label for="eventCommentInput" class="activity-comment-label">의견 작성</label>
+          <textarea id="eventCommentInput" placeholder="의견을 입력하세요." maxlength="1000" required></textarea>
+          <button id="eventCommentSubmit" type="submit">의견 등록</button>
+          <p id="eventCommentMessage" class="message activity-message" role="status" aria-live="polite"></p>
+        </form>
+
+      </section>
+
+    </article>
+
+    <p id="eventStateMessage" class="message activity-post-state" role="status" aria-live="polite">
+      행사를 불러오는 중...
+    </p>
+
+  </main>
+
+  <script type="module" src="/src/eventPromo/eventDetail.js"></script>
+</body>
+
+</html>

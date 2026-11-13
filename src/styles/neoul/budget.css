@@ -1,0 +1,1104 @@
+/* 예산 신청 / 기록 (budget.html) */
+
+/* ==========================================================
+   예산 신청 / 기록
+   ========================================================== */
+
+.budget-metal {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 26px 30px;
+  border-radius: var(--nu-r-card);
+  color: #ffffff;
+  background: var(--nu-metal);
+  box-shadow: var(--nu-shadow-metal);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.budget-metal[hidden] {
+  display: none;
+}
+
+.budget-metal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 55%);
+}
+
+.budget-metal .budget-eyebrow {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.budget-metal h2 {
+  margin: 6px 0 0;
+  max-width: none;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(180deg, #ffffff 0%, #e4e5f7 42%, #aeb0da 58%, #f4f4ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.budget-metal .budget-stats {
+  min-width: 460px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.budget-metal .budget-stats div {
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  background: rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 4px;
+}
+
+.budget-metal .budget-stats strong {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.budget-metal .budget-stats span {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.budget-lists {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.nu form.budget-form-e {
+  margin: 0;
+  padding: 28px;
+  gap: 18px;
+  background: #ffffff;
+  border: 1px solid var(--nu-line);
+  border-radius: var(--nu-r-card);
+  box-shadow: var(--nu-shadow-card);
+}
+
+.nu .budget-form-e > h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.nu .budget-form-e button {
+  width: auto;
+}
+
+.nu .budget-form-e .budget-form-notice {
+  margin: 0;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: var(--nu-r-field);
+  background: #fdf1dc;
+  color: #6b3a06;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.nu .budget-form-e .budget-message {
+  margin: 0;
+  min-height: 0;
+  font-size: 13px;
+  color: var(--nu-ink-3);
+  text-align: left;
+}
+
+.nu .budget-form-e .budget-message:empty {
+  display: none;
+}
+
+.nu .budget-head-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.nu .budget-head-fields label {
+  min-width: 0;
+}
+
+.nu .password-field input {
+  padding-right: 52px;
+}
+
+/* ---------- 신청 종류 (일반 · 긴급) ---------- */
+
+.nu .budget-type {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.nu .budget-type legend {
+  margin-bottom: 8px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--nu-ink-2);
+}
+
+.nu .budget-type-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.nu label.budget-type-option {
+  position: relative;
+  display: block;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* 진짜 단추는 숨기고 카드 전체를 누르게 한다 */
+.nu .budget-type-option input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.nu .budget-type-card {
+  height: 100%;
+  min-height: 76px;
+  padding: 14px 16px 14px 44px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--nu-field);
+  border-radius: 18px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 동그란 선택 표시 */
+.nu .budget-type-card::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  box-sizing: border-box;
+  border: 2px solid #c9cadb;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: border 0.2s var(--nu-ease);
+}
+
+.nu .budget-type-option:hover .budget-type-card {
+  border-color: #c9cadb;
+}
+
+.nu .budget-type-option input:checked + .budget-type-card {
+  border-color: var(--nu-accent);
+  background: var(--nu-lavender);
+  box-shadow: 0 0 0 3px rgba(43, 40, 112, 0.1);
+}
+
+.nu .budget-type-option input:checked + .budget-type-card::before {
+  border: 5px solid var(--nu-accent);
+}
+
+.nu .budget-type-option.is-urgent input:checked + .budget-type-card {
+  border-color: var(--nu-alert);
+  background: #fff6ef;
+  box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.1);
+}
+
+.nu .budget-type-option.is-urgent input:checked + .budget-type-card::before {
+  border-color: var(--nu-alert);
+}
+
+.nu .budget-type-option input:focus-visible + .budget-type-card {
+  outline: 3px solid rgba(43, 40, 112, 0.35);
+  outline-offset: 2px;
+}
+
+.nu .budget-type-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--nu-ink);
+}
+
+.nu .budget-type-desc {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--nu-ink-3);
+}
+
+.nu .budget-type-quota {
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  background: #ffede3;
+  color: #9a3412;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+/* 이번 달 긴급을 이미 쓴 경우 */
+.nu .budget-type-option.is-used {
+  cursor: not-allowed;
+}
+
+.nu .budget-type-option.is-used .budget-type-card {
+  border-style: dashed;
+  background: var(--nu-gray);
+  opacity: 0.75;
+}
+
+.nu .budget-type-option.is-used .budget-type-quota {
+  background: #e6e7ee;
+  color: var(--nu-ink-3);
+}
+
+.nu .budget-type-note {
+  margin: -4px 0 0;
+  font-size: 13px;
+  color: var(--nu-ink-3);
+}
+
+.nu .budget-type-note b {
+  color: var(--nu-accent);
+}
+
+/* 긴급 규칙 · 입력칸 */
+.nu .budget-urgent {
+  padding: 18px;
+  border-radius: 20px;
+  background: #fff6ef;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 18px;
+  animation: nu-rise 0.32s var(--nu-ease) both;
+}
+
+.nu .budget-urgent-rules-title {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #9a3412;
+}
+
+.nu .budget-urgent-rules ol {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #6b3a06;
+}
+
+.nu .budget-urgent-rules b {
+  color: #9a3412;
+}
+
+.nu .budget-urgent-fields {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.nu .budget-urgent-fields label {
+  margin: 0;
+}
+
+.nu .budget-urgent-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.nu .budget-urgent-label small {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9a3412;
+}
+
+.nu .budget-urgent-label small.is-ok {
+  color: #0f766e;
+}
+
+.nu .budget-urgent-fields :is(input, textarea) {
+  background: #ffffff;
+}
+
+.nu .budget-urgent-fields textarea {
+  min-height: 92px;
+}
+
+/* 긴급 상한을 넘은 합계 */
+.nu .budget-sheet-total strong.is-over {
+  color: var(--nu-alert);
+}
+
+.nu form.budget-form-e.is-urgent #budgetSubmitButton {
+  background: var(--nu-alert);
+  box-shadow: 0 10px 20px -12px rgba(194, 65, 12, 0.7);
+}
+
+.nu form.budget-form-e.is-urgent #budgetSubmitButton:hover:not(:disabled) {
+  background: #a3360a;
+}
+
+
+.nu .budget-sheet-head {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nu .budget-sheet-head h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.nu .budget-sheet-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nu .budget-sheet-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--nu-line);
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.nu .budget-sheet {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.nu .budget-sheet thead th {
+  padding: 12px 8px;
+  background: #f7f7fa;
+  border: 0;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--nu-ink-3);
+}
+
+.nu .budget-sheet thead th:first-child {
+  padding-left: 16px;
+}
+
+.nu .budget-sheet td {
+  padding: 8px;
+  border: 0;
+  border-top: 1px solid #f0f1f5;
+  vertical-align: middle;
+}
+
+.nu .budget-sheet td:first-child {
+  padding-left: 16px;
+  color: var(--nu-ink-3);
+  font-weight: 700;
+}
+
+.nu .budget-sheet .sheet-row:last-child {
+  animation: nu-rise 0.35s var(--nu-ease) both;
+}
+
+.nu .budget-sheet .sheet-input,
+.nu .budget-sheet select {
+  min-height: 40px;
+  height: 40px;
+  width: 100%;
+  padding: 0 10px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.nu .budget-sheet .sheet-input {
+  border: 1px solid var(--nu-field);
+  background: #ffffff;
+}
+
+.nu .budget-sheet .sheet-input:focus {
+  border-color: var(--nu-accent);
+  box-shadow: 0 0 0 3px rgba(43, 40, 112, 0.14);
+}
+
+.nu .budget-sheet .sheet-input.is-error {
+  border-color: #c2410c;
+  background: #fff7f3;
+}
+
+.nu .budget-sheet .sheet-kind {
+  margin: 0;
+  border: 0;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.nu .sheet-kind.is-1,
+.nu .budget-kind-chip.is-1 { background: #e6e6fb; color: #2b2870; }
+.nu .sheet-kind.is-2,
+.nu .budget-kind-chip.is-2 { background: #dff3ef; color: #0f5f57; }
+.nu .sheet-kind.is-3,
+.nu .budget-kind-chip.is-3 { background: #fdf1dc; color: #8a4b08; }
+.nu .sheet-kind.is-4,
+.nu .budget-kind-chip.is-4 { background: #eeeff3; color: #4a495f; }
+
+.nu .budget-sheet .sheet-shipping-label {
+  padding: 0 4px;
+  font-size: 13px;
+  color: var(--nu-ink-3);
+}
+
+.nu .budget-sheet tbody tr {
+  height: auto;
+}
+
+.nu .budget-sheet .sheet-cell-amount {
+  text-align: right;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.nu .budget-sheet .sheet-remove {
+  min-height: 32px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--nu-ink-3);
+  box-shadow: none;
+}
+
+.nu .budget-sheet .sheet-remove:hover {
+  background: #ffede3;
+  color: #9a3412;
+}
+
+.nu .budget-sheet .is-shipping td {
+  background: #fafafc;
+}
+
+.nu .budget-sheet tfoot td {
+  padding: 12px 8px;
+  border-top: 1px solid #f0f1f5;
+  font-size: 13px;
+  color: var(--nu-ink-3);
+  background: #fcfcfe;
+}
+
+.nu .budget-paste-hint {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--nu-ink-3);
+}
+
+.nu .budget-paste-hint kbd {
+  padding: 1px 6px;
+  border: 1px solid var(--nu-field);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.nu .budget-sheet-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nu .budget-sheet-tools #budgetAddRowButton {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 12px;
+  background: var(--nu-gray);
+  color: var(--nu-ink);
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.nu .budget-sheet-tools #budgetAddRowButton:hover {
+  background: #e7e8ef;
+}
+
+.nu .budget-sheet-summary {
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: var(--nu-lavender);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.nu .budget-kind-totals {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.nu .budget-kind-chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nu-ink-2);
+}
+
+.nu .budget-sheet-error {
+  margin: 0;
+  font-size: 13px;
+  color: #9a3412;
+}
+
+.nu .budget-sheet-error:empty {
+  display: none;
+}
+
+.nu .budget-sheet-total {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.nu .budget-sheet-total span {
+  font-size: 14px;
+  color: var(--nu-ink-2);
+}
+
+.nu .budget-sheet-total strong {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--nu-accent);
+}
+
+.nu #budgetSubmitButton {
+  align-self: flex-end;
+  min-width: 180px;
+}
+
+.nu form.budget-form-e.is-locked .budget-sheet-wrap,
+.nu form.budget-form-e.is-locked .budget-head-fields {
+  opacity: 0.6;
+}
+
+/* 내 예산 신청 · 최근 기록 */
+.budget-side-card,
+.budget-record-e {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.budget-record-e[hidden] {
+  display: none;
+}
+
+.budget-side-card h2,
+.budget-record-e h2 {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.nu .my-budget-requests-list,
+.nu .budget-record-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--nu-ink-3);
+}
+
+.nu .my-budget-request {
+  padding: 16px;
+  border: 1px solid var(--nu-line);
+  border-left: 1px solid var(--nu-line);
+  border-radius: 18px;
+  background: #fafafc;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--nu-ink);
+  animation: nu-rise 0.4s var(--nu-ease) both;
+  transition: box-shadow 0.25s var(--nu-ease), transform 0.25s var(--nu-ease);
+}
+
+.nu .my-budget-request:hover {
+  box-shadow: var(--nu-shadow-card);
+  transform: translateY(-2px);
+}
+
+.nu .my-budget-request > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nu .my-budget-request > div:first-child > span:not(.club-tag):not(.nu-chip) {
+  display: inline;
+  margin: 0;
+  font-size: 13px;
+  color: var(--nu-ink-3);
+}
+
+.nu .my-budget-request > div:first-child .nu-chip {
+  margin-left: auto;
+}
+
+.nu .budget-item-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nu .budget-item-card {
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: #ffffff;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 14px;
+}
+
+.nu .budget-item-card strong {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nu .budget-item-card .budget-item-amount {
+  font-weight: 700;
+  color: var(--nu-ink-2);
+}
+
+.nu .budget-item-memo {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 12px;
+  color: #9a3412;
+}
+
+.nu .review-status {
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  background: #eeeff3;
+  color: #4a495f;
+}
+
+.nu .review-status.is-approved { background: #dff3ef; color: #0f5f57; }
+.nu .review-status.is-rejected { background: #ffede3; color: #9a3412; }
+.nu .review-status.is-pending { background: #fdf1dc; color: #8a4b08; }
+
+.nu .my-budget-request-details {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 12px;
+  font-size: 13px;
+  color: var(--nu-ink-2);
+}
+
+.nu .my-budget-request-details p {
+  margin: 0;
+}
+
+.nu .my-budget-request-details p:last-child {
+  grid-column: 1 / -1;
+}
+
+.nu .my-budget-request-details b {
+  font-weight: 700;
+  color: var(--nu-ink-3);
+}
+
+.nu .budget-record-list li {
+  padding: 14px 4px;
+  border: 0;
+  border-bottom: 1px solid #f0f1f5;
+  border-radius: 0;
+  background: none;
+  animation: nu-rise 0.4s var(--nu-ease) both;
+}
+
+.nu .budget-record-list li:last-child {
+  border-bottom: 0;
+}
+
+.nu .club-tag {
+  border-radius: 999px;
+}
+
+/* 최근 기록 한 줄 */
+.nu .budget-record-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--nu-ink);
+}
+
+.nu .budget-record-details {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nu .budget-record-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nu .budget-record-title {
+  font-size: 15px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nu .budget-record-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--nu-ink-3);
+}
+
+.nu .budget-record-list li > b {
+  font-size: 15px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.nu .budget-record-badge {
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  background: #eeeff3;
+  color: #4a495f;
+  white-space: nowrap;
+}
+
+.nu .budget-record-badge.status-approved { background: #dff3ef; color: #0f5f57; }
+.nu .budget-record-badge.status-partial,
+.nu .budget-record-badge.status-assembly { background: #e6e6fb; color: #2b2870; }
+.nu .budget-record-badge.status-rejected { background: #ffede3; color: #9a3412; }
+.nu .budget-record-badge.status-pending { background: #fdf1dc; color: #8a4b08; }
+/* 연합회장 확인 완료 — 처리를 기다리는 단계 */
+.nu .budget-record-badge.status-confirmed { background: #fff4d6; color: #7a4d00; box-shadow: inset 0 0 0 1px #f3d58a; }
+.nu .budget-record-badge.status-completed { background: #e3f1ff; color: #0b4f8a; }
+
+.nu .budget-record-subtext {
+  margin: -6px 0 0;
+  font-size: 13px;
+  color: var(--nu-ink-3);
+}
+
+@media (max-width: 860px) {
+  /* ---------- 예산 ---------- */
+  .budget-metal {
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .budget-metal h2 {
+    display: none;
+  }
+
+  .budget-metal .budget-stats {
+    min-width: 0;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .budget-metal .budget-stats div {
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  .budget-metal .budget-stats strong {
+    font-size: 15px;
+  }
+
+  .budget-metal .budget-stats span {
+    font-size: 11px;
+  }
+
+  .budget-lists {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nu .budget-type-options,
+  .nu .budget-urgent {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nu .budget-urgent {
+    padding: 14px;
+    gap: 14px;
+  }
+
+  .nu form.budget-form-e {
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .nu .budget-head-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nu .budget-sheet-actions {
+    width: 100%;
+  }
+
+  .nu .budget-sheet-actions button {
+    flex: 1;
+  }
+
+  .nu .budget-paste-hint {
+    display: none;
+  }
+
+  /* 표를 품목 카드로 바꿔서 보여준다 */
+  .nu .budget-sheet-wrap {
+    overflow: visible;
+    border: 0;
+    background: none;
+  }
+
+  .nu .budget-sheet {
+    min-width: 0;
+  }
+
+  .nu .budget-sheet thead {
+    display: none;
+  }
+
+  .nu .budget-sheet,
+  .nu .budget-sheet tbody,
+  .nu .budget-sheet tfoot {
+    display: block;
+  }
+
+  .nu .budget-sheet tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nu .budget-sheet .sheet-row {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr) 40px;
+    grid-template-areas:
+      "num kind remove"
+      "name name name"
+      "qty price price"
+      "link link link"
+      "desc desc desc"
+      "amount amount amount";
+    gap: 8px;
+    padding: 14px 16px 16px;
+    border: 1px solid var(--nu-line);
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(22, 21, 43, 0.04);
+  }
+
+  .nu .budget-sheet .sheet-row td {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: auto;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--nu-ink-2);
+  }
+
+  .nu .budget-sheet .sheet-row td:nth-child(1) { grid-area: num; justify-content: center; font-size: 14px; color: var(--nu-ink-3); }
+  .nu .budget-sheet .sheet-row td:nth-child(2) { grid-area: kind; }
+  .nu .budget-sheet .sheet-row td:nth-child(3) { grid-area: name; }
+  .nu .budget-sheet .sheet-row td:nth-child(4) { grid-area: qty; }
+  .nu .budget-sheet .sheet-row td:nth-child(5) { grid-area: price; }
+  .nu .budget-sheet .sheet-row td:nth-child(6) { grid-area: amount; }
+  .nu .budget-sheet .sheet-row td:nth-child(7) { grid-area: link; }
+  .nu .budget-sheet .sheet-row td:nth-child(8) { grid-area: desc; }
+  .nu .budget-sheet .sheet-row td:nth-child(9) { grid-area: remove; align-items: flex-end; }
+
+  .nu .budget-sheet .sheet-row td:nth-child(3)::before { content: "품목"; }
+  .nu .budget-sheet .sheet-row td:nth-child(4)::before { content: "수량"; }
+  .nu .budget-sheet .sheet-row td:nth-child(5)::before { content: "단가 (원)"; }
+  .nu .budget-sheet .sheet-row td:nth-child(7)::before { content: "구매 링크"; }
+  .nu .budget-sheet .sheet-row td:nth-child(8)::before { content: "세부 내용 (사용 목적)"; }
+
+  .nu .budget-sheet .sheet-row td:nth-child(6) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px dashed var(--nu-field);
+    font-size: 16px;
+    color: var(--nu-ink);
+    text-align: right;
+  }
+
+  .nu .budget-sheet .sheet-row td:nth-child(6)::before {
+    content: "금액 (자동)";
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--nu-ink-3);
+  }
+
+  .nu .budget-sheet .sheet-input,
+  .nu .budget-sheet select {
+    height: 44px;
+    min-height: 44px;
+    border-radius: 12px;
+    font-size: 15px;
+  }
+
+  .nu .budget-sheet .sheet-kind {
+    height: 32px;
+    min-height: 32px;
+    width: auto;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .nu .budget-sheet tfoot,
+  .nu .budget-sheet tfoot tr,
+  .nu .budget-sheet tfoot td {
+    display: block;
+  }
+
+  .nu .budget-sheet tfoot td:first-child {
+    display: none;
+  }
+
+  .nu .budget-sheet tfoot td {
+    margin-top: 10px;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 12px;
+  }
+
+  .nu .budget-sheet-tools #budgetAddRowButton {
+    width: 100%;
+    min-height: 48px;
+    border: 1.5px dashed #c9cadb;
+    border-radius: 16px;
+    background: #fafafc;
+  }
+
+  .nu .budget-sheet-summary {
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .nu .budget-sheet-total strong {
+    font-size: 22px;
+  }
+
+  .nu #budgetSubmitButton {
+    align-self: stretch;
+    min-height: 52px;
+    font-size: 16px;
+  }
+
+  .budget-side-card,
+  .budget-record-e {
+    padding: 18px;
+  }
+
+  .nu .my-budget-request-details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

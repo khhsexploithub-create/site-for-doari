@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "app.web.site_for_dongari.twa",
+    "sha256_cert_fingerprints": ["37:D7:2B:65:07:4D:2D:18:C8:61:A7:B4:13:66:16:45:87:53:06:42:A5:D9:A3:A0:A0:F7:41:89:38:53:7A:85"]
+  }
+}]

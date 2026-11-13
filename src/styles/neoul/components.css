@@ -1,0 +1,459 @@
+/* ==========================================================
+   기존 페이지 부품을 E안 모양으로 맞춘다.
+   (legacy.css 의 구조 · 클래스 이름은 그대로 두고 겉모습만 바꾼다)
+   ========================================================== */
+
+/* hidden 속성이 붙은 것은 어떤 display 규칙보다 우선해서 숨긴다.
+   (카드 · 줄 배치 규칙이 숨김을 덮어써서 빈 칸이 보이던 문제 방지) */
+.nu [hidden] {
+  display: none !important;
+}
+
+/* ---------- 큰 틀 ---------- */
+
+.nu main.feature-page {
+  width: auto;
+}
+
+.nu .feature-content {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 카드가 되는 구역들 */
+.nu :is(.resources-section, .calendar-section, .union-events-section, .admin-management-section,
+  .board-card, .board-post, .board-detail, .board-write, .activity-post, .event-promo-list-card,
+  .notice-write-section) {
+  padding: 26px 28px;
+  border: 1px solid var(--nu-line);
+  border-radius: var(--nu-r-card);
+  background: #ffffff;
+  box-shadow: var(--nu-shadow-card);
+}
+
+.nu .subtext {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--nu-ink-3);
+}
+
+/* 구역 제목 */
+.nu :is(.resources-section-heading, .calendar-section-heading, .admin-section-heading) {
+  margin: 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nu .admin-section-heading {
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.nu :is(.resources-section-heading, .calendar-section-heading, .admin-section-heading) h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--nu-ink);
+}
+
+.nu :is(.resources-section-heading, .calendar-section-heading) p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--nu-ink-3);
+}
+
+/* 알림 · 안내 문장 */
+.nu .message {
+  min-height: 0;
+  margin: 0;
+  font-size: 14px;
+  color: var(--nu-ink-2);
+}
+
+.nu .message:empty {
+  display: none;
+}
+
+/* ---------- 상세 페이지의 '돌아가기' ---------- */
+
+.nu .back-link {
+  align-self: flex-start;
+  min-height: 40px;
+  margin: 8px 0 0;
+  padding: 0 16px 0 12px;
+  border: 0;
+  border-radius: 20px;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nu-ink-2);
+  box-shadow: 0 1px 2px rgba(22, 21, 43, 0.08), 0 8px 18px -12px rgba(22, 21, 43, 0.35);
+  transition: transform 0.2s var(--nu-ease), color 0.2s ease;
+}
+
+.nu .back-link:hover {
+  color: var(--nu-accent);
+  transform: translateX(-2px);
+}
+
+/* ---------- 버튼 ---------- */
+/* :where() 로 우선순위를 0 으로 둬서, 탭 · 칸처럼 따로 모양을 정한 버튼은 그대로 둔다. */
+
+:where(.nu) button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--nu-accent);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+:where(.nu) button:hover:not(:disabled) {
+  background: var(--nu-accent-hover);
+}
+
+:where(.nu) button.secondary,
+:where(.nu) a.secondary {
+  border: 1px solid var(--nu-field);
+  background: #ffffff;
+  color: var(--nu-ink);
+  font-weight: 700;
+}
+
+:where(.nu) a.secondary {
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+:where(.nu) button.secondary:hover:not(:disabled),
+:where(.nu) a.secondary:hover {
+  border-color: #c9cadb;
+  background: #fafafc;
+}
+
+:where(.nu) button.danger {
+  background: #ffede3;
+  color: #9a3412;
+}
+
+:where(.nu) button.danger:hover:not(:disabled) {
+  background: #ffdccb;
+}
+
+/* 폼 안의 제출 버튼은 눈에 띄게 */
+.nu :is(.reservation-form, .schedule-form, .activity-form, .union-event-form) > button[type="submit"],
+.nu .union-event-form-actions button[type="submit"] {
+  min-height: 50px;
+  font-size: 15px;
+  box-shadow: var(--nu-shadow-btn);
+}
+
+/* ---------- 폼 ---------- */
+
+/* legacy.css 의 form 은 카드처럼 생겼다. 카드 안에 들어간 폼은 틀을 걷어낸다. */
+.nu :is(.reservation-form, .schedule-form, .activity-form, .union-event-form, .event-promo-form,
+  .board-comment-form, .activity-comment-form) {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  gap: 14px;
+}
+
+.nu .schedule-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.nu .reservation-time-fields,
+.nu .form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.nu :is(input[type="date"], input[type="time"], input[type="datetime-local"]) {
+  min-width: 0;
+}
+
+.nu textarea {
+  min-height: 110px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.nu input[type="file"] {
+  padding: 10px;
+  border: 1.5px dashed #c9cadb;
+  border-radius: var(--nu-r-field);
+  background: #fafafc;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.nu input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--nu-accent);
+}
+
+.nu :is(.schedule-field-hint, .account-hint, .schedule-date-selection-message) {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--nu-ink-3);
+}
+
+.nu .password-field {
+  position: relative;
+}
+
+.nu .password-field button.password-toggle {
+  min-height: 0;
+  background: transparent;
+  color: var(--nu-ink-3);
+}
+
+.nu .password-field button.password-toggle:hover {
+  background: var(--nu-gray);
+}
+
+/* ---------- 대화상자 ---------- */
+
+.nu dialog {
+  max-width: min(92vw, 560px);
+  max-height: 88vh;
+  padding: 26px 28px;
+  border: 0;
+  border-radius: var(--nu-r-card);
+  background: #ffffff;
+  color: var(--nu-ink);
+  box-shadow: 0 2px 6px rgba(22, 21, 43, 0.08), 0 40px 80px -30px rgba(22, 21, 43, 0.55);
+}
+
+.nu dialog::backdrop {
+  background: rgba(22, 21, 43, 0.38);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.nu :is(.activity-dialog-head, .schedule-dialog-header) {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nu :is(.activity-dialog-head, .schedule-dialog-header) h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.nu :is(.activity-dialog-head, .schedule-dialog-header) p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--nu-ink-3);
+}
+
+.nu :is(.activity-dialog-close, .schedule-dialog-close) {
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 20px;
+  background: var(--nu-gray);
+  color: var(--nu-ink-2);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.nu :is(.activity-dialog-close, .schedule-dialog-close):hover {
+  background: #e6e7ee;
+}
+
+.nu .schedule-detail-club {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--nu-accent);
+}
+
+.nu .schedule-detail-list {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.nu .schedule-detail-list > div {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #fafafc;
+}
+
+.nu .schedule-detail-list .schedule-detail-description {
+  grid-column: 1 / -1;
+}
+
+.nu .schedule-detail-list dt {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--nu-ink-3);
+}
+
+.nu .schedule-detail-list dd {
+  margin: 4px 0 0;
+  font-size: 15px;
+  white-space: pre-wrap;
+}
+
+/* ---------- 공통 상태 칩 ---------- */
+
+.nu :is(.board-badge, .reservation-status, .notice-item-badge) {
+  height: 24px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+  background: #eeeff3;
+  color: #4a495f;
+}
+
+.nu .board-badge.is-open { background: var(--nu-accent); color: #ffffff; }
+.nu .board-badge.is-waiting,
+.nu .reservation-status.status-pending { background: #fdf1dc; color: #8a4b08; }
+.nu .board-badge.is-notice { background: #e6e6fb; color: var(--nu-accent); }
+.nu .reservation-status.status-approved { background: #dff3ef; color: #0f5f57; }
+.nu .reservation-status.status-rejected { background: #ffede3; color: #9a3412; }
+
+/* ---------- 예산 일반 · 긴급 표시 (예산 페이지 · 관리자 화면 공통) ---------- */
+
+.nu .budget-type-chip {
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  font-size: 11px;
+  font-weight: 800;
+  background: #eeeff3;
+  color: #4a495f;
+}
+
+.nu .budget-type-chip.is-urgent {
+  background: var(--nu-alert);
+  color: #ffffff;
+}
+
+/* ---------- 행사 카드 (캘린더 · 관리자 화면 공통) ---------- */
+
+.nu a.event-promo-item {
+  padding: 12px 14px;
+  border: 1px solid var(--nu-line);
+  border-radius: 18px;
+  background: #ffffff;
+  transition: transform 0.2s var(--nu-ease), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.nu a.event-promo-item:hover,
+.nu a.event-promo-item:focus-visible {
+  border-color: #dcdcf0;
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: var(--nu-shadow-card);
+}
+
+.nu .event-promo-thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+}
+
+.nu .event-promo-body strong {
+  font-weight: 800;
+}
+
+.nu .event-promo-meta {
+  color: var(--nu-ink-3);
+}
+
+.nu .event-promo-empty {
+  padding: 22px 12px;
+  border: 1.5px dashed var(--nu-field);
+  border-radius: 16px;
+  color: var(--nu-ink-3);
+  font-size: 14px;
+}
+
+.nu .event-poster-preview {
+  border: 1px solid var(--nu-line);
+  border-radius: 16px;
+  background: #fafafc;
+}
+
+/* ---------- 관리자 쪽에서도 쓰는 카드 안 버튼 줄 ---------- */
+
+.nu .admin-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ---------- 모바일 ---------- */
+
+@media (max-width: 860px) {
+  .nu :is(.resources-section, .calendar-section, .union-events-section, .admin-management-section,
+    .board-card, .board-post, .board-detail, .board-write, .activity-post, .event-promo-list-card,
+    .notice-write-section) {
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .nu .schedule-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nu .schedule-detail-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nu dialog {
+    width: calc(100vw - 24px);
+    max-width: none;
+    margin: auto auto 12px;
+    padding: 22px 20px;
+    border-radius: 24px;
+  }
+
+  .nu dialog[open] {
+    animation: nu-sheet-up 0.34s var(--nu-ease) both;
+  }
+}

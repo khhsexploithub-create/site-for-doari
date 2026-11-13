@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>동아리 공지 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu nu-board">
+  <main class="nu-wrap feature-page board-page board-page-narrow nu-enter">
+    <a href="/activity.html?tab=notice" class="back-link">← 동아리 공지 목록으로</a>
+
+    <article id="postArticle" class="board-post" hidden>
+
+      <header class="board-post-head">
+        <p class="board-post-kind">
+          <span class="board-badge is-notice">알림</span>
+        </p>
+
+        <h1 id="postTitle">제목 없음</h1>
+
+        <div class="board-post-meta">
+          <span>작성자 <b id="postClubName"></b></span>
+          <span id="postViews">조회 0</span>
+          <span>등록일 <time id="postDate"></time></span>
+        </div>
+      </header>
+
+      <div class="board-post-body" id="postContent"></div>
+
+      <div class="board-post-actions">
+        <a href="/activity.html?tab=notice" class="secondary board-list-button">목록</a>
+        <button id="postDeleteButton" type="button" class="danger" hidden>삭제</button>
+      </div>
+
+      <section class="board-comments" aria-labelledby="activityCommentsHeading">
+
+        <h2 id="activityCommentsHeading">
+          댓글 <span id="activityCommentCount">0</span>
+        </h2>
+
+        <ul id="activityCommentList" class="activity-comment-list" aria-live="polite"></ul>
+
+        <form id="activityCommentForm" class="board-comment-form">
+          <label for="activityCommentInput" class="sr-only">댓글 작성</label>
+          <input id="activityCommentInput" type="text" placeholder="댓글을 작성하세요." maxlength="1000"
+            required>
+          <button id="activityCommentSubmit" type="submit">댓글</button>
+        </form>
+
+        <p id="activityCommentMessage" class="message activity-message" role="status"
+          aria-live="polite"></p>
+
+      </section>
+
+    </article>
+
+    <p id="postStateMessage" class="message activity-post-state" role="status" aria-live="polite">
+      공지를 불러오는 중...
+    </p>
+
+  </main>
+
+  <dialog id="activityDeleteDialog" class="activity-form-dialog activity-delete-dialog"
+    aria-labelledby="activityDeleteHeading">
+    <div class="activity-dialog-head">
+      <div>
+        <h2 id="activityDeleteHeading">비밀번호를 입력하세요</h2>
+        <p id="activityDeleteTarget" class="activity-delete-target"></p>
+      </div>
+      <button id="activityDeleteCloseButton" type="button" class="secondary activity-dialog-close"
+        aria-label="삭제 창 닫기">×</button>
+    </div>
+
+    <form id="activityDeleteForm" class="activity-form">
+      <label for="activityDeletePassword">
+        비밀번호
+        <input id="activityDeletePassword" name="deletePassword" type="password" autocomplete="off"
+          placeholder="등록할 때 설정한 비밀번호" required>
+      </label>
+
+      <div class="activity-delete-actions">
+        <button id="activityDeleteCancelButton" type="button" class="secondary">취소</button>
+        <button id="activityDeleteConfirmButton" type="submit" class="danger">삭제</button>
+      </div>
+
+      <p id="activityDeleteMessage" class="message activity-message" role="status" aria-live="polite"></p>
+    </form>
+  </dialog>
+
+  <script type="module" src="/src/activity/activityDetail.js"></script>
+</body>
+
+</html>

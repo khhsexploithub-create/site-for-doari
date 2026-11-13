@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>동아리 활동 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu nu-board">
+  <main class="nu-wrap feature-page board-page nu-enter">
+    <header class="nu-pagehead">
+      <img class="nu-pagehead-wave" src="/neoul-wave.png" alt="" aria-hidden="true">
+      <a href="/" class="nu-back" aria-label="홈으로">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </a>
+      <p class="nu-crumb"><a href="/">홈</a> › 동아리 활동</p>
+      <h1>동아리 활동</h1>
+      <p class="nu-pagehead-desc">연합회가 연 과제를 제출하고, 동아리 공지를 올리는 곳입니다.</p>
+    </header>
+
+    <div class="board-card">
+
+    <div class="board-tabs" role="tablist" aria-label="동아리 활동 항목">
+      <button type="button" class="board-tab is-active" role="tab" aria-selected="true"
+        aria-controls="assignmentPanel" data-tab="assignment">
+        동아리 과제 제출
+      </button>
+      <button type="button" class="board-tab" role="tab" aria-selected="false"
+        aria-controls="noticePanel" data-tab="notice">
+        동아리 공지
+      </button>
+    </div>
+
+
+    <!-- ==========================================================
+         동아리 과제 제출
+         ========================================================== -->
+
+    <section id="assignmentPanel" class="board-panel" role="tabpanel" aria-label="동아리 과제 제출">
+
+      <p id="assignmentClubNotice" class="board-club-notice" hidden></p>
+
+      <div class="board-subtabs" id="assignmentClubTabs" role="tablist"
+        aria-label="소속 동아리"></div>
+
+      <div class="board-toolbar">
+        <div class="board-filters">
+          <select id="assignmentYearFilter" aria-label="연도 선택">
+            <option value="">전체 연도</option>
+          </select>
+          <select id="assignmentStatusFilter" aria-label="상태 선택">
+            <option value="">전체</option>
+            <option value="open">제출</option>
+            <option value="waiting">대기</option>
+            <option value="closed">마감</option>
+          </select>
+          <select id="assignmentSortSelect" aria-label="정렬 방식"></select>
+        </div>
+
+        <div class="board-actions">
+          <button type="button" id="assignmentMineButton" class="board-my-button"
+            aria-pressed="false">MY</button>
+          <button type="button" id="assignmentCreateButton" class="board-write-button" hidden>
+            + 과제 등록
+          </button>
+        </div>
+      </div>
+
+      <div class="board-table-wrap">
+        <table class="board-table assignment-table">
+          <thead>
+            <tr>
+              <th scope="col" class="board-cell-number">순번</th>
+              <th scope="col" class="board-cell-status">구분</th>
+              <th scope="col" class="board-cell-title">과제명</th>
+              <th scope="col" class="board-cell-club">동아리</th>
+              <th scope="col" class="board-cell-count">제출</th>
+              <th scope="col" class="board-cell-person">담당자</th>
+              <th scope="col" class="board-cell-due">마감일</th>
+              <th scope="col" class="board-cell-go">바로가기</th>
+            </tr>
+          </thead>
+          <tbody id="assignmentTableBody" aria-live="polite">
+            <tr class="board-empty-row">
+              <td colspan="8">과제를 불러오는 중...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+
+    <!-- ==========================================================
+         동아리 공지
+         ========================================================== -->
+
+    <section id="noticePanel" class="board-panel" role="tabpanel" aria-label="동아리 공지" hidden>
+
+      <div class="board-toolbar">
+        <div class="board-filters">
+          <span class="board-count">전체 <b id="noticeTotalCount">0</b>건</span>
+          <select id="noticeSearchField" aria-label="검색 대상">
+            <option value="clubName">동아리 이름</option>
+            <option value="title">제목</option>
+          </select>
+          <input id="noticeSearchInput" type="search" placeholder="검색어를 입력하세요">
+          <select id="noticeSortSelect" aria-label="정렬 방식"></select>
+        </div>
+
+        <div class="board-actions">
+          <button type="button" id="noticeCreateButton" class="board-write-button" hidden>
+            + 글쓰기
+          </button>
+        </div>
+      </div>
+
+      <div class="board-table-wrap">
+        <table class="board-table notice-table">
+          <thead>
+            <tr>
+              <th scope="col" class="board-cell-number">순번</th>
+              <th scope="col" class="board-cell-status">구분</th>
+              <th scope="col" class="board-cell-title">글제목</th>
+              <th scope="col" class="board-cell-person">작성자</th>
+              <th scope="col" class="board-cell-count">조회</th>
+              <th scope="col" class="board-cell-date">날짜</th>
+            </tr>
+          </thead>
+          <tbody id="noticeTableBody" aria-live="polite">
+            <tr class="board-empty-row">
+              <td colspan="6">공지를 불러오는 중...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    </div>
+
+    <p class="board-footnote">제출 기간이 지나면 목록에서 자동으로 '마감'으로 바뀝니다.</p>
+
+  </main>
+
+
+  <!-- 과제 등록 (연합회 임원 전용) -->
+  <dialog id="assignmentFormDialog" class="activity-form-dialog" aria-labelledby="assignmentFormHeading">
+    <div class="activity-dialog-head">
+      <div>
+        <h2 id="assignmentFormHeading">동아리 과제 등록</h2>
+        <p>제출 기간이 지나면 목록에서 자동으로 '마감'으로 바뀝니다.</p>
+      </div>
+      <button id="assignmentFormCloseButton" type="button" class="secondary activity-dialog-close"
+        aria-label="등록 창 닫기">×</button>
+    </div>
+
+    <form id="assignmentForm" class="activity-form">
+      <label for="assignmentClub">
+        동아리
+        <select id="assignmentClub" name="clubName" required></select>
+        <small class="account-hint" id="assignmentClubHint"></small>
+      </label>
+
+      <label for="assignmentTitle">
+        과제명
+        <input id="assignmentTitle" name="title" type="text" maxlength="200" required>
+      </label>
+
+      <div class="form-row">
+        <label for="assignmentManager">
+          담당자
+          <input id="assignmentManager" name="managerName" type="text" maxlength="40" required>
+        </label>
+
+        <label for="assignmentTarget">
+          제출 대상
+          <input id="assignmentTarget" name="target" type="text" maxlength="60"
+            placeholder="예: 전체 동아리" required>
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label for="assignmentStartAt">
+          제출 시작
+          <input id="assignmentStartAt" name="startAt" type="datetime-local" required>
+        </label>
+
+        <label for="assignmentDueAt">
+          마감
+          <input id="assignmentDueAt" name="dueAt" type="datetime-local" required>
+        </label>
+      </div>
+
+      <label class="activity-checkbox">
+        <input id="assignmentAllowLateEdit" type="checkbox">
+        <span>마감 후 수정 허용</span>
+      </label>
+
+      <label class="activity-checkbox">
+        <input id="assignmentAllowComment" type="checkbox">
+        <span>제출글 댓글 사용</span>
+      </label>
+
+      <label for="assignmentNotice">
+        공지사항
+        <textarea id="assignmentNotice" name="notice" rows="5"
+          placeholder="제출 방법과 분량 등 안내할 내용을 적어주세요."></textarea>
+      </label>
+
+      <div class="assignment-attach" role="group" aria-labelledby="assignmentAttachHeading">
+        <p id="assignmentAttachHeading" class="assignment-attach-title">
+          첨부파일 <small>최대 10개 · 파일당 30MB 이하</small>
+        </p>
+        <ol id="assignmentAttachList" class="board-attach-list"></ol>
+        <button type="button" id="assignmentAttachAddButton" class="board-attach-add">+ 첨부 칸 추가</button>
+      </div>
+
+      <button id="assignmentSubmitButton" type="submit">등록</button>
+      <p id="assignmentFormMessage" class="message activity-message" role="status" aria-live="polite"></p>
+    </form>
+  </dialog>
+
+
+  <!-- 공지 등록 (연합회 임원 전용) -->
+  <dialog id="activityFormDialog" class="activity-form-dialog" aria-labelledby="activityFormHeading">
+    <div class="activity-dialog-head">
+      <div>
+        <h2 id="activityFormHeading">동아리 공지 등록</h2>
+        <p>동아리 활동 공지를 새로 올립니다.</p>
+      </div>
+      <button id="activityFormCloseButton" type="button" class="secondary activity-dialog-close"
+        aria-label="등록 창 닫기">×</button>
+    </div>
+
+    <form id="activityForm" class="activity-form">
+      <label for="activityClubName">
+        작성자 (동아리 이름)
+        <input id="activityClubName" name="clubName" type="text" required>
+      </label>
+
+      <label for="activityTitle">
+        제목
+        <input id="activityTitle" name="title" type="text" required>
+      </label>
+
+      <label for="activityContent">
+        내용
+        <textarea id="activityContent" name="content" required></textarea>
+      </label>
+
+      <label for="activityPassword">
+        비밀번호
+        <input id="activityPassword" name="password" type="password" minlength="4" maxlength="40"
+          autocomplete="new-password" placeholder="삭제할 때 사용할 비밀번호 (4자 이상)" required>
+      </label>
+
+      <p class="activity-form-hint">
+        등록한 공지를 삭제할 때 이 비밀번호가 필요합니다. 잊어버리면 관리자에게 문의해주세요.
+      </p>
+
+      <button id="activitySubmitButton" type="submit">등록</button>
+      <p id="activityFormMessage" class="message activity-message" role="status" aria-live="polite"></p>
+    </form>
+  </dialog>
+
+
+  <script type="module" src="/src/activity/activity.js"></script>
+</body>
+
+</html>

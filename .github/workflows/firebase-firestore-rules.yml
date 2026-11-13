@@ -1,0 +1,38 @@
+name: Deploy Firestore rules
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - firestore.rules
+      - storage.rules
+      - firebase.firestore.json
+      - .github/workflows/firebase-firestore-rules.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy_rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SITE_FOR_DONGARI }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Deploy Firestore security rules
+        run: npx --yes firebase-tools deploy --only firestore:rules --project site-for-dongari --config firebase.firestore.json --non-interactive
+
+      # 첨부파일(과제 · 제출글) 저장소 규칙. firestore.rules 와 별도 단계로 두어,
+      # 서비스 계정에 저장소 규칙 권한이 없어도 위의 Firestore 규칙 배포는 영향을 받지 않는다.
+      - name: Deploy Storage security rules
+        continue-on-error: true
+        run: npx --yes firebase-tools deploy --only storage --project site-for-dongari --config firebase.firestore.json --non-interactive

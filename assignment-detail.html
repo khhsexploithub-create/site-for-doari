@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>동아리 과제 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu nu-board">
+  <main class="nu-wrap feature-page board-page nu-enter">
+    <a href="/activity.html" class="back-link">← 동아리 활동으로</a>
+
+    <article id="assignmentArticle" class="board-detail" hidden>
+
+      <header class="board-detail-head">
+        <h1>
+          <span id="assignmentTitleText">과제</span>
+          <span id="assignmentClubTag" class="board-detail-club"></span>
+          <span class="board-detail-tag">상세</span>
+        </h1>
+        <a href="/activity.html" class="secondary board-list-button">목록</a>
+      </header>
+
+      <div class="board-detail-actions">
+        <button type="button" id="assignmentSubmitOpenButton" class="board-write-button">
+          + 과제제출
+        </button>
+        <button type="button" id="assignmentEditButton" class="secondary" hidden>과제 수정</button>
+        <button type="button" id="assignmentDeleteButton" class="danger" hidden>과제 삭제</button>
+      </div>
+
+      <div class="board-period">
+        <p class="board-period-left">
+          <span id="assignmentStatusBadge" class="board-badge is-open">제출</span>
+          <span id="assignmentPeriodText">제출기간 : -</span>
+        </p>
+        <p class="board-period-right" id="assignmentRemainingText"></p>
+      </div>
+
+      <table class="board-info-table">
+        <caption class="sr-only">과제 정보</caption>
+        <tbody>
+          <tr>
+            <th scope="row">담당자</th>
+            <td id="assignmentManagerText" colspan="3">-</td>
+          </tr>
+          <tr>
+            <th scope="row">개설 시간</th>
+            <td id="assignmentOpenedText">-</td>
+            <th scope="row">조회</th>
+            <td id="assignmentViewsText">0</td>
+          </tr>
+          <tr>
+            <th scope="row">제출 대상</th>
+            <td id="assignmentTargetText" colspan="3">-</td>
+          </tr>
+          <tr>
+            <th scope="row">마감 후 수정</th>
+            <td id="assignmentLateEditText">금지</td>
+            <th scope="row">파일 첨부</th>
+            <td>가능 (한 파일 30MB 이하)</td>
+          </tr>
+          <tr>
+            <th scope="row">댓글 사용</th>
+            <td id="assignmentCommentText">사용 안 함</td>
+            <th scope="row">글 조회</th>
+            <td>본인 · 담당자 · 관리자</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <section class="board-notice-box" aria-labelledby="assignmentNoticeHeading">
+        <h2 id="assignmentNoticeHeading">공지사항</h2>
+        <p id="assignmentNoticeText" class="board-notice-text">안내된 내용이 없습니다.</p>
+      </section>
+
+      <section class="board-attachments" id="assignmentAttachments" aria-labelledby="assignmentAttachmentsHeading" hidden>
+        <h2 id="assignmentAttachmentsHeading">과제 첨부파일</h2>
+        <ul id="assignmentAttachmentList" class="board-attachment-list"></ul>
+      </section>
+
+      <section class="board-panel" aria-labelledby="submissionListHeading">
+
+        <div class="board-toolbar">
+          <div class="board-filters">
+            <h2 id="submissionListHeading" class="board-subheading">제출 현황</h2>
+            <span class="board-count">전체 <b id="submissionTotalCount">0</b>건</span>
+            <select id="submissionSortSelect" aria-label="정렬 방식"></select>
+          </div>
+
+          <div class="board-actions">
+            <button type="button" id="submissionMineButton" class="board-my-button"
+              aria-pressed="false">MY</button>
+          </div>
+        </div>
+
+        <div class="board-table-wrap">
+          <table class="board-table submission-table">
+            <thead>
+              <tr>
+                <th scope="col" class="board-cell-number">순번</th>
+                <th scope="col" class="board-cell-title">제목</th>
+                <th scope="col" class="board-cell-person">이름</th>
+                <th scope="col" class="board-cell-date">날짜</th>
+                <th scope="col" class="board-cell-count">조회</th>
+              </tr>
+            </thead>
+            <tbody id="submissionTableBody" aria-live="polite">
+              <tr class="board-empty-row">
+                <td colspan="5">제출 현황을 불러오는 중...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+    </article>
+
+    <p id="assignmentStateMessage" class="message activity-post-state" role="status" aria-live="polite">
+      과제를 불러오는 중...
+    </p>
+
+  </main>
+
+
+  <!-- 과제 수정 (작성자 · 관리자 전용) -->
+  <dialog id="assignmentEditDialog" class="activity-form-dialog" aria-labelledby="assignmentEditHeading">
+    <div class="activity-dialog-head">
+      <div>
+        <h2 id="assignmentEditHeading">동아리 과제 수정</h2>
+        <p>고친 내용은 저장하는 즉시 모두에게 반영됩니다.</p>
+      </div>
+      <button id="assignmentEditCloseButton" type="button" class="secondary activity-dialog-close"
+        aria-label="수정 창 닫기">×</button>
+    </div>
+
+    <form id="assignmentEditForm" class="activity-form">
+      <label for="assignmentEditTitle">
+        과제명
+        <input id="assignmentEditTitle" type="text" maxlength="200" required>
+      </label>
+
+      <div class="form-row">
+        <label for="assignmentEditManager">
+          담당자
+          <input id="assignmentEditManager" type="text" maxlength="40" required>
+        </label>
+
+        <label for="assignmentEditTarget">
+          제출 대상
+          <input id="assignmentEditTarget" type="text" maxlength="60" required>
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label for="assignmentEditStartAt">
+          제출 시작
+          <input id="assignmentEditStartAt" type="datetime-local" required>
+        </label>
+
+        <label for="assignmentEditDueAt">
+          마감
+          <input id="assignmentEditDueAt" type="datetime-local" required>
+        </label>
+      </div>
+
+      <label class="activity-checkbox">
+        <input id="assignmentEditAllowLateEdit" type="checkbox">
+        <span>마감 후 수정 허용</span>
+      </label>
+
+      <label class="activity-checkbox">
+        <input id="assignmentEditAllowComment" type="checkbox">
+        <span>제출글 댓글 사용</span>
+      </label>
+
+      <label for="assignmentEditNotice">
+        공지사항
+        <textarea id="assignmentEditNotice" rows="5"></textarea>
+      </label>
+
+      <div class="assignment-attach" role="group" aria-labelledby="assignmentEditAttachHeading">
+        <p id="assignmentEditAttachHeading" class="assignment-attach-title">
+          첨부파일 <small>최대 10개 · 파일당 30MB 이하 · × 를 누르면 첨부가 해제됩니다</small>
+        </p>
+        <ol id="assignmentEditAttachList" class="board-attach-list"></ol>
+        <button type="button" id="assignmentEditAttachAddButton" class="board-attach-add">+ 첨부 칸 추가</button>
+      </div>
+
+      <button id="assignmentEditSaveButton" type="submit">저장</button>
+      <p id="assignmentEditMessage" class="message activity-message" role="status" aria-live="polite"></p>
+    </form>
+  </dialog>
+
+
+  <script type="module" src="/src/activity/assignmentDetail.js"></script>
+</body>
+
+</html>

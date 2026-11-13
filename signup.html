@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>회원가입 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu nu-account">
+
+  <main class="account-shell nu-enter">
+    <section class="account-hero">
+      <img class="account-hero-wave" src="/neoul-wave.png" alt="" aria-hidden="true">
+      <span class="nu-eyebrow">KYUNGHEE HIGH SCHOOL</span>
+      <p class="account-hero-title">너울</p>
+      <p class="account-hero-sub">제2대 동아리연합회</p>
+      <p class="account-hero-desc">가입하면 예산 신청 · 자원 예약을 바로 할 수 있어요.</p>
+    </section>
+
+    <form class="account-card" id="signUpForm" novalidate>
+
+      <h1 class="account-title">회원가입</h1>
+      <p class="account-lead">학번과 소속 동아리를 정확히 입력해주세요.</p>
+
+      <label for="signUpStudentId">학번
+        <input
+          id="signUpStudentId"
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]{5}"
+          placeholder="숫자 5자리 (예: 10712)"
+          autocomplete="off"
+          required
+        >
+        <small class="account-hint" id="studentIdHint">학년·반·번호를 붙여 다섯 자리로 입력하세요.</small>
+      </label>
+
+      <label for="signUpName">이름
+        <input id="signUpName" type="text" placeholder="예: 홍길동" autocomplete="name" maxlength="20" required>
+      </label>
+
+      <div class="club-choice-field" id="signUpClubField">
+        <span class="club-choice-title">소속 동아리 <em>*</em></span>
+        <div id="signUpClubPicker"></div>
+        <small class="account-hint">가입 후에는 관리자만 바꿀 수 있어요. 신중하게 골라주세요.</small>
+      </div>
+
+      <label for="signUpEmail">이메일
+        <input id="signUpEmail" type="email" placeholder="name@example.com" autocomplete="email" required>
+      </label>
+
+      <label for="signUpPassword">비밀번호
+        <div class="password-field">
+          <input id="signUpPassword" type="password" placeholder="6자 이상 입력" autocomplete="new-password" required>
+          <button id="signUpPasswordToggle" class="password-toggle" type="button" aria-controls="signUpPassword"></button>
+        </div>
+      </label>
+
+      <label for="signUpPasswordConfirm">비밀번호 확인
+        <div class="password-field">
+          <input id="signUpPasswordConfirm" type="password" placeholder="비밀번호를 다시 입력" autocomplete="new-password" required>
+          <button id="signUpPasswordConfirmToggle" class="password-toggle" type="button" aria-controls="signUpPasswordConfirm"></button>
+        </div>
+      </label>
+
+      <button id="signUpSubmitButton" type="submit">회원가입</button>
+
+      <p id="signUpMessage" class="message account-message" role="status" aria-live="polite"></p>
+
+      <p class="account-note">
+        모든 계정은 '일반'으로 가입됩니다. 연합회 임원 권한은 관리자가 부여합니다.
+      </p>
+
+      <p class="account-switch">
+        이미 계정이 있으신가요?
+        <a href="/login.html">로그인</a>
+      </p>
+
+    </form>
+
+    <p class="account-foot">Built by EXPLOIT HUB</p>
+  </main>
+
+  <script type="module" src="/src/auth/signup.js"></script>
+</body>
+
+</html>

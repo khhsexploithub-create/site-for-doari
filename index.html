@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>제 2대 동아리연합회 너울 | 동아리 통합 온라인 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu nu-home">
+
+  <div class="home-shell">
+
+    <main class="home-layout nu-enter" id="portalMain">
+
+      <header class="home-hero">
+        <img class="home-wave" src="/neoul-wave.png" alt="" aria-hidden="true">
+
+        <div class="home-hero-top">
+          <span class="nu-eyebrow">KYUNGHEE HIGH SCHOOL</span>
+          <button type="button" class="nu-profile-pill" data-profile-toggle aria-label="내 계정">
+            <span class="nu-avatar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>
+            </span>
+            <span class="nu-profile-name" data-profile-name></span>
+          </button>
+        </div>
+
+        <h1 class="home-title">너울</h1>
+        <p class="home-sub">제2대 동아리연합회</p>
+        <p class="home-desc">동아리 운영에 필요한 기능을 하나의 공간에서 관리합니다.</p>
+        <p class="home-greeting" id="portalGreeting">둘러보는 중입니다.</p>
+      </header>
+
+      <section class="home-alerts nu-card" aria-labelledby="homeFeedTitle">
+        <div class="home-alerts-head">
+          <h2 id="homeFeedTitle"><span id="homeFeedHeading">새 알림</span> <span class="nu-badge" id="homeFeedCount" hidden></span></h2>
+          <a href="/notices.html" class="home-alerts-more">모두 보기 →</a>
+        </div>
+        <ul class="home-feed" id="homeFeedList" aria-live="polite">
+          <li class="home-feed-empty">불러오는 중...</li>
+        </ul>
+      </section>
+
+      <a href="/budget.html" class="home-tile tile-budget" data-notify-section="budget" data-badge-label="처리 결과" data-requires-login>
+        <img class="tile-budget-ghost" src="/neoul-wave.png" alt="" aria-hidden="true">
+        <span class="tile-budget-shine" aria-hidden="true"></span>
+        <span class="tile-icon is-glass">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h12v4"/><path d="M3 7v10a2 2 0 0 0 2 2h14V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14" r="1.2"/></svg>
+        </span>
+        <span class="tile-bottom">
+          <span class="tile-text">
+            <span class="tile-title is-metal">예산 신청 / 기록</span>
+            <span class="tile-desc">품목별 승인 결과 확인</span>
+          </span>
+          <span class="tile-go" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </span>
+      </a>
+
+      <a href="/calendar.html" class="home-tile tile-cal">
+        <span class="tile-cal-date" aria-hidden="true">
+          <b id="homeDay"></b>
+          <span><span id="homeMonth"></span><span id="homeWeekday"></span></span>
+        </span>
+        <span class="tile-icon tile-cal-icon">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+        </span>
+        <span class="tile-text">
+          <span class="tile-title"><span class="tile-cal-prefix">통합 </span>활동 캘린더</span>
+          <span class="tile-desc tile-cal-desc">전체 동아리 일정</span>
+        </span>
+      </a>
+
+      <a href="/activity.html" class="home-tile tile-act">
+        <span class="tile-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16 5.2a3 3 0 0 1 0 5.6"/><path d="M18 13.8c1.9.6 3 2.4 3 5.2"/></svg>
+        </span>
+        <span class="tile-text">
+          <span class="tile-title">동아리 활동</span>
+          <span class="tile-desc">과제 제출 · 공지</span>
+        </span>
+      </a>
+
+      <a href="/resources.html" class="home-tile tile-res" data-notify-section="resources" data-badge-label="처리 결과" data-requires-login>
+        <span class="tile-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5 12 12l9-4.5"/><path d="M12 12v9"/></svg>
+        </span>
+        <span class="tile-text">
+          <span class="tile-title">자원 예약</span>
+          <span class="tile-desc">공간 · 장비 · 물품</span>
+        </span>
+      </a>
+
+      <a href="/union-events.html" class="home-tile tile-evt" data-notify-section="unionEvents" data-badge-label="새 행사">
+        <span class="tile-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg>
+        </span>
+        <span class="tile-text">
+          <span class="tile-title">연합회 행사</span>
+          <span class="tile-desc">일정 · 장소 · 대상</span>
+        </span>
+      </a>
+
+    </main>
+
+    <footer class="home-footer">
+      <a href="/admin.html" data-executive-only hidden>관리자 페이지 →</a>
+      <span class="home-built">
+        <img src="/logo.png" alt="EXPLOIT HUB 로고">
+        Built by EXPLOIT HUB
+      </span>
+    </footer>
+
+  </div>
+
+  <script type="module" src="/src/portalAuth.js"></script>
+
+</body>
+
+</html>

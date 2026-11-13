@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>통합 활동 캘린더 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu">
+  <main class="nu-wrap feature-page nu-enter">
+    <header class="nu-pagehead">
+      <img class="nu-pagehead-wave" src="/neoul-wave.png" alt="" aria-hidden="true">
+      <a href="/" class="nu-back" aria-label="홈으로">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </a>
+      <p class="nu-crumb"><a href="/">홈</a> › 통합 활동 캘린더</p>
+      <h1>통합 활동 캘린더</h1>
+      <p class="nu-pagehead-desc">전체 동아리의 활동 일정을 한눈에 확인하세요.</p>
+    </header>
+
+    <section class="feature-content calendar-page">
+      <section class="calendar-section" aria-labelledby="calendarHeading">
+        <div class="calendar-toolbar">
+          <div class="calendar-heading-group">
+            <h2 id="calendarHeading" aria-live="polite"></h2>
+            <p id="calendarHint">날짜를 클릭하거나 드래그하면 선택한 날짜에 일정을 등록할 수 있습니다.</p>
+          </div>
+          <div class="calendar-controls" aria-label="달력 이동">
+            <button id="previousMonthButton" class="secondary" type="button" aria-label="이전 달">← 이전 달</button>
+            <button id="todayButton" class="secondary" type="button">오늘</button>
+            <button id="nextMonthButton" class="secondary" type="button" aria-label="다음 달">다음 달 →</button>
+          </div>
+        </div>
+
+        <p id="calendarStatus" class="calendar-status message" role="status" aria-live="polite">일정을 불러오는 중...</p>
+
+        <div class="calendar-scroll">
+          <div class="calendar-grid calendar-weekdays" aria-hidden="true">
+            <span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span>
+          </div>
+          <div id="calendarGrid" class="calendar-grid calendar-days" role="grid" aria-labelledby="calendarHeading"></div>
+        </div>
+
+        <div class="calendar-legend" aria-hidden="true">
+          <span><i class="is-schedule"></i>동아리 일정</span>
+          <span><i class="is-promo"></i>행사 홍보</span>
+          <span><i class="is-union"></i>연합회 행사</span>
+        </div>
+      </section>
+
+      <section class="calendar-section calendar-agenda" aria-labelledby="agendaHeading">
+        <p id="agendaEyebrow" class="calendar-agenda-eyebrow">오늘</p>
+        <h2 id="agendaHeading"></h2>
+        <ul id="agendaList" class="agenda-list" aria-live="polite"></ul>
+        <a class="calendar-agenda-promo" href="#eventPromoSection">
+          <span class="calendar-agenda-promo-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4h3l5 4V6L7 10z"/><path d="M16 9a4 4 0 0 1 0 6"/></svg>
+          </span>
+          <span><strong>행사 홍보</strong>동아리 행사 모아 보기</span>
+        </a>
+      </section>
+
+      <section id="scheduleFormSection" class="calendar-section" aria-labelledby="scheduleFormHeading">
+        <div class="calendar-section-heading">
+          <h2 id="scheduleFormHeading">일정 등록</h2>
+          <p>동아리의 새로운 활동 일정을 등록하는 신청란입니다.</p>
+        </div>
+
+        <form id="scheduleForm" class="schedule-form" novalidate>
+          <p id="scheduleAuthMessage" class="message calendar-message" role="status" aria-live="polite"></p>
+          <div class="schedule-form-grid">
+            <label for="scheduleClubName">동아리 이름
+              <input id="scheduleClubName" name="clubName" type="text" placeholder="예: 밴드부" required>
+            </label>
+            <label for="scheduleTitle">일정 제목
+              <input id="scheduleTitle" name="title" type="text" placeholder="예: 정기 연습" required>
+            </label>
+            <label for="scheduleDate">시작 날짜
+              <input id="scheduleDate" name="date" type="date" required>
+              <small id="scheduleDateSelectionMessage" class="schedule-date-selection-message">날짜를 클릭하거나 드래그해 선택하세요.</small>
+            </label>
+            <label for="scheduleEndDate">종료 날짜 (선택)
+              <input id="scheduleEndDate" type="date" aria-describedby="scheduleDateSelectionMessage">
+            </label>
+            <label for="scheduleLocation">장소
+              <input id="scheduleLocation" name="location" type="text" placeholder="예: 음악실" required>
+            </label>
+            <label for="scheduleStartTime">시작 시간
+              <input id="scheduleStartTime" name="startTime" type="time" required>
+            </label>
+            <label for="scheduleEndTime">종료 시간
+              <input id="scheduleEndTime" name="endTime" type="time" required>
+            </label>
+          </div>
+          <label for="scheduleDescription">상세 내용
+            <textarea id="scheduleDescription" name="description" placeholder="활동 내용을 자세히 입력하세요." required></textarea>
+          </label>
+          <label for="scheduleNotice">행사 진행 공지
+            <textarea id="scheduleNotice" name="notice" placeholder="행사가 어떤 순서로 진행되는지 적어주세요. 예: 14:00 집합 → 14:20 리허설 → 15:00 본 공연"></textarea>
+            <small class="schedule-field-hint">비워두어도 등록됩니다. 적어두면 상세 창에서 부원들이 진행 방식을 확인할 수 있습니다.</small>
+          </label>
+          <button id="scheduleSubmitButton" type="submit">일정 등록</button>
+          <p id="scheduleFormMessage" class="message calendar-message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section id="eventPromoSection" class="calendar-section" aria-labelledby="eventPromoHeading">
+
+        <div class="calendar-section-heading">
+          <h2 id="eventPromoHeading">행사 홍보</h2>
+          <p>동아리의 행사를 홍보할 수 있는 특별 신청란입니다.</p>
+        </div>
+
+        <div class="event-promo-layout">
+
+          <form id="eventPromoForm" class="schedule-form event-promo-form" novalidate>
+
+            <h3>행사 홍보 등록</h3>
+
+            <p id="eventPromoAuthMessage" class="message calendar-message" role="status" aria-live="polite"></p>
+
+            <label for="eventClubName">동아리명
+              <select id="eventClubName" name="clubName" required></select>
+            </label>
+            <label for="eventTitle">행사 이름
+              <input id="eventTitle" name="title" type="text" placeholder="예: 가을 정기 공연" required>
+            </label>
+            <label for="eventDate">날짜
+              <input id="eventDate" name="date" type="date" required>
+            </label>
+            <label for="eventLocation">장소
+              <input id="eventLocation" name="location" type="text" placeholder="예: 4층 강당" required>
+            </label>
+            <label for="eventStartTime">시작 시간
+              <input id="eventStartTime" name="startTime" type="time" required>
+            </label>
+            <label for="eventEndTime">종료 시간
+              <input id="eventEndTime" name="endTime" type="time" required>
+            </label>
+            <label for="eventPromotion">홍보 내용
+              <textarea id="eventPromotion" name="promotion" placeholder="행사를 소개하는 글을 적어주세요. 누가 와도 좋은지, 무엇을 볼 수 있는지." required></textarea>
+            </label>
+            <label for="eventPlan">행사 계획
+              <textarea id="eventPlan" name="plan" placeholder="세부 진행 계획을 적어주세요. 준비물, 담당, 시간표 등." required></textarea>
+            </label>
+            <label for="eventPoster">포스터 이미지
+              <input id="eventPoster" name="poster" type="file" accept="image/*">
+              <small class="schedule-field-hint">선택 사항입니다. 올리면 브라우저에서 자동으로 줄여 저장합니다.</small>
+            </label>
+
+            <div id="eventPosterPreviewBox" class="event-poster-preview" hidden>
+              <img id="eventPosterPreview" alt="포스터 미리보기">
+              <button id="eventPosterRemove" type="button" class="secondary">이미지 제거</button>
+            </div>
+
+            <button id="eventPromoSubmitButton" type="submit">행사 홍보 등록</button>
+            <p id="eventPromoMessage" class="message calendar-message" role="status" aria-live="polite"></p>
+
+          </form>
+
+          <article class="event-promo-list-card">
+            <h3>등록된 행사</h3>
+            <p class="subtext">행사를 누르면 홍보 내용과 계획, 의견을 볼 수 있는 페이지로 이동합니다. 등록한 내용을 고치거나 지우는 것은 관리자 화면의 '05 행사 홍보 관리'에서 합니다.</p>
+            <ul id="eventPromoList" class="event-promo-list" aria-live="polite">
+              <li>행사를 불러오는 중...</li>
+            </ul>
+          </article>
+
+        </div>
+
+      </section>
+    </section>
+  </main>
+
+  <dialog id="scheduleDialog" class="schedule-dialog" aria-labelledby="scheduleDetailTitle">
+    <div class="schedule-dialog-header">
+      <div>
+        <p id="scheduleDetailClub" class="schedule-detail-club"></p>
+        <h2 id="scheduleDetailTitle"></h2>
+      </div>
+      <button id="scheduleDialogClose" class="secondary schedule-dialog-close" type="button" aria-label="상세 일정 닫기">×</button>
+    </div>
+    <dl class="schedule-detail-list">
+      <div><dt>날짜</dt><dd id="scheduleDetailDate"></dd></div>
+      <div><dt>시작 시간</dt><dd id="scheduleDetailStartTime"></dd></div>
+      <div><dt>종료 시간</dt><dd id="scheduleDetailEndTime"></dd></div>
+      <div><dt>장소</dt><dd id="scheduleDetailLocation"></dd></div>
+      <div class="schedule-detail-description"><dt>상세 내용</dt><dd id="scheduleDetailDescription"></dd></div>
+      <div class="schedule-detail-description"><dt>행사 진행 공지</dt><dd id="scheduleDetailNotice"></dd></div>
+    </dl>
+  </dialog>
+
+  <script type="module" src="/src/calendar/calendar.js"></script>
+</body>
+
+</html>

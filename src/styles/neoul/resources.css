@@ -1,0 +1,393 @@
+/* 자원 예약 — 위: 평면도 / 아래: 신청서 | 내 예약 · 예약 내역 */
+
+.nu .resources-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* 신청서가 두 줄을 차지할 때 남는 높이는 마지막 줄로 보낸다. */
+  grid-template-rows: auto auto 1fr;
+  align-items: start;
+  gap: 16px;
+}
+
+.nu .resources-page > .resources-section:nth-child(1) { grid-column: 1 / -1; }
+.nu .resources-page > .resources-section:nth-child(2) { grid-column: 1; grid-row: 2 / span 2; }
+.nu .resources-page > .my-reservations-section { grid-column: 2; grid-row: 2; }
+.nu .resources-page > .resources-section:nth-child(3) { grid-column: 2; grid-row: 3; }
+
+/* ---------- 안내 문구 ---------- */
+
+.nu .resource-layout-note {
+  margin: 8px 0 0 !important;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--nu-gray);
+  color: var(--nu-ink-3) !important;
+  font-size: 13px;
+}
+
+.nu .resource-layout-note strong {
+  color: var(--nu-ink-2);
+}
+
+.nu .space-reservation-notice,
+.nu .reservation-training-notice {
+  padding: 12px 16px;
+  border: 0;
+  border-radius: var(--nu-r-field);
+  background: #fdf1dc;
+  color: #6b3a06;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+  box-shadow: none;
+}
+
+/* ---------- 공간 · 장비 · 물품 (나눠진 단추) ---------- */
+
+.nu .resource-tabs {
+  width: fit-content;
+  margin: 0 0 14px;
+  padding: 4px;
+  border-radius: 16px;
+  background: var(--nu-gray);
+  display: flex;
+  gap: 2px;
+}
+
+:where(.nu) .resource-tab {
+  min-height: 40px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--nu-ink-3);
+  font-weight: 700;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+:where(.nu) .resource-tab:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--nu-ink);
+}
+
+:where(.nu) .resource-tab.is-active,
+:where(.nu) .resource-tab.is-active:hover {
+  background: #ffffff;
+  color: var(--nu-ink);
+  box-shadow: 0 1px 2px rgba(22, 21, 43, 0.08), 0 6px 14px -8px rgba(22, 21, 43, 0.3);
+}
+
+/* ---------- 층 고르기 ---------- */
+
+.nu .floor-tabs {
+  gap: 8px;
+}
+
+:where(.nu) .floor-tab {
+  min-height: 42px;
+  border: 1px solid var(--nu-field);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--nu-ink-2);
+  font-weight: 700;
+}
+
+:where(.nu) .floor-tab:hover:not(:disabled) {
+  border-color: #c9cadb;
+  background: #fafafc;
+}
+
+:where(.nu) .floor-tab.is-active,
+:where(.nu) .floor-tab.is-active:hover {
+  border-color: var(--nu-accent);
+  background: var(--nu-accent);
+  color: #ffffff;
+  box-shadow: var(--nu-shadow-btn);
+}
+
+/* ---------- 평면도 ---------- */
+
+.nu .floor-plan-shell {
+  border: 0;
+  border-radius: 22px;
+  background: var(--nu-lavender);
+  box-shadow: none;
+}
+
+.nu .floor-plan-heading {
+  padding: 18px 20px 4px;
+  border: 0;
+  background: none;
+}
+
+.nu .floor-plan-heading h3 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--nu-ink);
+}
+
+.nu .floor-plan-heading p {
+  color: var(--nu-accent);
+}
+
+.nu .floor-plan-eyebrow {
+  color: var(--nu-accent);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+}
+
+.nu .floor-plan {
+  padding: 14px 20px 20px;
+  scrollbar-color: #c9cadb transparent;
+}
+
+.nu .floor-room {
+  border-color: #dcdcf0;
+  background: #ffffff;
+  color: var(--nu-ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+:where(.nu) button.floor-room {
+  min-height: 84px;
+  padding: 10px 7px;
+  border: 1px solid #dcdcf0;
+  border-radius: 0;
+  background: #ffffff;
+  color: var(--nu-ink);
+  font-size: 13px;
+  transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.nu button.floor-room:hover,
+.nu button.floor-room:focus-visible {
+  background: #ecebfb;
+  color: var(--nu-accent);
+  outline: 0;
+  box-shadow: inset 0 0 0 2px rgba(43, 40, 112, 0.35);
+}
+
+.nu button.floor-room.is-selected {
+  background: var(--nu-accent);
+  color: #ffffff;
+  box-shadow: inset 0 0 0 3px #17163f;
+  animation: nu-badge-pop 0.3s var(--nu-spring);
+}
+
+.nu .floor-room.is-unavailable {
+  border-color: #e3e3ee;
+  background: #eeeef5;
+  color: #8a89a3;
+}
+
+.nu .floor-room.is-unavailable::after {
+  color: #9a99b2;
+}
+
+.nu .floor-room.is-facility {
+  border-color: #e3e3ee;
+  background: #f6f6fa;
+  color: #9a99b2;
+}
+
+.nu .floor-room.is-empty {
+  border-color: #e3e3ee;
+  background: repeating-linear-gradient(-45deg, #efeff6, #efeff6 7px, #e6e6f0 7px, #e6e6f0 14px);
+}
+
+.nu .floor-plan-corridor {
+  border-color: #dcdcf0;
+  background: #e8e8f8;
+  color: var(--nu-accent);
+}
+
+.nu .floor-plan-note {
+  color: var(--nu-ink-3);
+}
+
+/* 층에 칸 대신 고르기 목록이 나올 때 */
+:where(.nu) .floor-space-option {
+  min-height: 96px;
+  padding: 16px;
+  border: 1px solid var(--nu-field);
+  border-radius: 16px;
+  background: #ffffff;
+  color: var(--nu-ink);
+  font-weight: 400;
+}
+
+:where(.nu) .floor-space-option:hover:not(:disabled) {
+  border-color: var(--nu-accent);
+  background: #fafafc;
+  color: var(--nu-accent);
+}
+
+:where(.nu) .floor-space-option.is-selected,
+:where(.nu) .floor-space-option.is-selected:hover {
+  border-color: var(--nu-accent);
+  background: var(--nu-accent);
+  color: #ffffff;
+  box-shadow: var(--nu-shadow-btn);
+}
+
+.nu .floor-space-option.is-selected span {
+  color: #dedffb;
+}
+
+.nu .floor-plan-legend {
+  margin-top: 14px;
+  color: var(--nu-ink-3);
+}
+
+.nu .legend-swatch {
+  border-color: #dcdcf0;
+  border-radius: 4px;
+}
+
+.nu .legend-swatch.is-available { border-color: #b9b8e0; background: #ffffff; }
+.nu .legend-swatch.is-selected { border-color: var(--nu-accent); background: var(--nu-accent); }
+.nu .legend-swatch.is-unavailable { background: #eeeef5; }
+.nu .legend-swatch.is-facility { background: #f6f6fa; }
+
+/* ---------- 장비 · 물품 목록 ---------- */
+
+.nu .resource-list li,
+.nu .reservation-item {
+  padding: 14px 16px;
+  border: 1px solid var(--nu-line);
+  border-radius: 18px;
+  background: #fafafc;
+}
+
+.nu .resource-item[data-selectable="true"]:hover,
+.nu .resource-item[data-selectable="true"]:focus-visible {
+  border-color: #c9cadb;
+  background: #ffffff;
+  box-shadow: var(--nu-shadow-card);
+}
+
+.nu .resource-item.is-selected {
+  border-color: var(--nu-accent);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(43, 40, 112, 0.12);
+}
+
+.nu .resource-availability-badge {
+  background: #dff3ef;
+  color: #0f5f57 !important;
+}
+
+/* ---------- 예약 내역 · 내 예약 ---------- */
+
+.nu .reservation-item p {
+  margin-top: 6px;
+  color: var(--nu-ink-3);
+}
+
+.nu .reservation-item .reservation-purpose {
+  color: var(--nu-ink-2);
+}
+
+.nu .reservation-search {
+  margin-bottom: 14px;
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.nu .reservation-search label {
+  font-size: 0;
+  gap: 0;
+}
+
+.nu .reservation-search :is(input, select) {
+  font-size: 14px;
+}
+
+.nu .reservation-list:empty::before {
+  content: "아직 내역이 없어요.";
+  display: block;
+  padding: 22px 12px;
+  border: 1.5px dashed var(--nu-field);
+  border-radius: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--nu-ink-3);
+}
+
+:where(.nu) .reservation-cancel-button {
+  min-height: 36px;
+  margin-top: 10px;
+  padding: 0 14px;
+  background: #ffede3;
+  color: #9a3412;
+}
+
+:where(.nu) .reservation-cancel-button:hover:not(:disabled) {
+  background: #ffdccb;
+}
+
+/* ---------- 모바일 ---------- */
+
+@media (max-width: 860px) {
+  .nu .resources-page {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nu .resources-page > .resources-section:nth-child(n),
+  .nu .resources-page > .my-reservations-section {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .nu .resources-page {
+    grid-template-rows: none;
+  }
+
+  /* 내 예약을 예약 내역보다 먼저 */
+  .nu .resources-page > .my-reservations-section {
+    order: 1;
+  }
+
+  .nu .resources-page > .resources-section:nth-child(3) {
+    order: 2;
+  }
+
+  /* 날짜는 한 줄, 시작 · 종료 시간은 나란히 */
+  .nu .reservation-time-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nu .reservation-time-fields > label:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .nu .resource-tabs {
+    width: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .nu .floor-tabs {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  :where(.nu) .floor-tab {
+    padding: 0;
+  }
+
+  .nu .floor-plan-heading {
+    padding: 14px 14px 0;
+  }
+
+  .nu .floor-plan {
+    padding: 12px 14px 14px;
+  }
+
+  .nu .reservation-search {
+    grid-template-columns: 110px minmax(0, 1fr);
+  }
+}

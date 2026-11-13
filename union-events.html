@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>연합회 행사 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu">
+  <main class="nu-wrap feature-page nu-enter">
+    <header class="nu-pagehead">
+      <img class="nu-pagehead-wave" src="/neoul-wave.png" alt="" aria-hidden="true">
+      <a href="/" class="nu-back" aria-label="홈으로">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </a>
+      <p class="nu-crumb"><a href="/">홈</a> › 연합회 행사</p>
+      <h1>연합회 행사</h1>
+      <p class="nu-pagehead-desc">동아리연합회가 주최하는 행사를 한곳에 정리합니다.</p>
+    </header>
+
+    <section class="feature-content union-events-page">
+
+      <!-- 등록 (행사운영 소위원장 · 관리자 전용) -->
+      <section id="unionEventFormSection" class="union-events-section" aria-labelledby="unionEventFormHeading" hidden>
+        <div class="resources-section-heading">
+          <h2 id="unionEventFormHeading">행사 등록</h2>
+          <p>행사운영 소위원장과 관리자만 등록할 수 있습니다.</p>
+        </div>
+
+        <form id="unionEventForm" class="schedule-form union-event-form" novalidate>
+          <p id="unionEventAuthMessage" class="message calendar-message" role="status" aria-live="polite"></p>
+
+          <input type="hidden" id="unionEventEditingId" value="">
+
+          <div class="schedule-form-grid">
+            <label for="unionEventTitle">행사 제목
+              <input id="unionEventTitle" name="title" type="text" placeholder="예: 동아리 한마당" required>
+            </label>
+            <label for="unionEventLocation">장소
+              <input id="unionEventLocation" name="location" type="text" placeholder="예: 본관 강당" required>
+            </label>
+            <label for="unionEventDate">날짜
+              <input id="unionEventDate" name="date" type="date" required>
+            </label>
+            <label for="unionEventTarget">대상
+              <input id="unionEventTarget" name="target" type="text" placeholder="예: 전교생 / 동아리 부장" required>
+            </label>
+            <label for="unionEventStartTime">시작 시간
+              <input id="unionEventStartTime" name="startTime" type="time" required>
+            </label>
+            <label for="unionEventEndTime">종료 시간
+              <input id="unionEventEndTime" name="endTime" type="time" required>
+            </label>
+          </div>
+
+          <label for="unionEventContent">내용
+            <textarea id="unionEventContent" name="content" placeholder="행사 내용과 진행 방식을 적어주세요." required></textarea>
+          </label>
+
+          <label for="unionEventPoster">포스터 이미지
+            <input id="unionEventPoster" name="poster" type="file" accept="image/*">
+            <small class="schedule-field-hint">선택 사항입니다. 올리면 브라우저에서 자동으로 줄여 저장합니다.</small>
+          </label>
+
+          <div id="unionEventPosterPreviewBox" class="event-poster-preview" hidden>
+            <img id="unionEventPosterPreview" alt="포스터 미리보기">
+            <button id="unionEventPosterRemove" type="button" class="secondary">이미지 제거</button>
+          </div>
+
+          <div class="union-event-form-actions">
+            <button id="unionEventSubmitButton" type="submit">행사 등록</button>
+            <button id="unionEventCancelEditButton" type="button" class="secondary" hidden>수정 취소</button>
+          </div>
+
+          <p id="unionEventFormMessage" class="message calendar-message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <!-- 다가오는 행사 -->
+      <section class="union-events-section" aria-labelledby="upcomingHeading">
+        <div class="resources-section-heading">
+          <h2 id="upcomingHeading">다가오는 행사</h2>
+          <p>오늘 이후에 열리는 연합회 행사입니다.</p>
+        </div>
+        <ul id="upcomingEventList" class="union-event-list" aria-live="polite">
+          <li class="union-event-empty">행사를 불러오는 중...</li>
+        </ul>
+      </section>
+
+      <!-- 지난 행사 -->
+      <section class="union-events-section" aria-labelledby="pastHeading">
+        <div class="resources-section-heading">
+          <h2 id="pastHeading">지난 행사</h2>
+          <p>이미 끝난 연합회 행사입니다.</p>
+        </div>
+        <ul id="pastEventList" class="union-event-list" aria-live="polite"></ul>
+      </section>
+
+    </section>
+  </main>
+
+  <!-- 상세 보기 -->
+  <dialog id="unionEventDialog" class="schedule-dialog union-event-dialog" aria-labelledby="unionEventDetailTitle">
+    <div class="schedule-dialog-header">
+      <div>
+        <p id="unionEventDetailBadge" class="schedule-detail-club"></p>
+        <h2 id="unionEventDetailTitle"></h2>
+      </div>
+      <button id="unionEventDialogClose" class="secondary schedule-dialog-close" type="button" aria-label="행사 상세 닫기">×</button>
+    </div>
+
+    <img id="unionEventDetailPoster" class="union-event-detail-poster" alt="행사 포스터" hidden>
+
+    <dl class="schedule-detail-list">
+      <div><dt>날짜</dt><dd id="unionEventDetailDate"></dd></div>
+      <div><dt>시간</dt><dd id="unionEventDetailTime"></dd></div>
+      <div><dt>장소</dt><dd id="unionEventDetailLocation"></dd></div>
+      <div><dt>대상</dt><dd id="unionEventDetailTarget"></dd></div>
+      <div class="schedule-detail-description"><dt>내용</dt><dd id="unionEventDetailContent"></dd></div>
+      <div><dt>작성</dt><dd id="unionEventDetailAuthor"></dd></div>
+    </dl>
+
+    <div id="unionEventDetailActions" class="admin-card-actions" hidden>
+      <button id="unionEventEditButton" type="button" class="secondary">수정</button>
+      <button id="unionEventDeleteButton" type="button" class="danger">삭제</button>
+    </div>
+  </dialog>
+
+  <script type="module" src="/src/unionEvents/unionEvents.js"></script>
+</body>
+
+</html>

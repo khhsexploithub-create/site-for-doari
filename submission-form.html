@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>과제제출 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu nu-board">
+  <main class="nu-wrap feature-page board-page board-page-narrow nu-enter">
+    <a href="/activity.html" class="back-link" id="submitBackLink">← 과제로 돌아가기</a>
+
+    <form id="submitForm" class="board-write" hidden>
+
+      <header class="board-detail-head">
+        <h1>
+          <span>과제제출</span>
+          <span class="board-detail-tag" id="submitAssignmentTitle"></span>
+        </h1>
+      </header>
+
+      <div class="board-period">
+        <p class="board-period-left">
+          <span id="submitStatusBadge" class="board-badge is-open">제출</span>
+          <span id="submitPeriodText">제출기간 : -</span>
+        </p>
+        <p class="board-period-right" id="submitRemainingText"></p>
+      </div>
+
+      <div class="board-write-row">
+        <div class="board-write-label">이름/학번</div>
+        <div class="board-write-field board-write-identity">
+          <input id="submitAuthorName" type="text" aria-label="이름" readonly>
+          <input id="submitStudentId" type="text" aria-label="학번" readonly>
+        </div>
+      </div>
+
+      <div class="board-write-row">
+        <label class="board-write-label" for="submitTitle">글 제목</label>
+        <div class="board-write-field">
+          <input id="submitTitle" type="text" maxlength="200" placeholder="제목을 입력하세요." required>
+        </div>
+      </div>
+
+      <div class="board-write-row">
+        <label class="board-write-label" for="submitContent">내용</label>
+        <div class="board-write-field">
+          <textarea id="submitContent" rows="14" maxlength="10000"
+            placeholder="내용을 입력하세요." required></textarea>
+          <p class="board-write-count"><b id="submitContentCount">0</b>자</p>
+        </div>
+      </div>
+
+      <div class="board-write-row">
+        <div class="board-write-label">
+          파일첨부
+          <span class="board-write-sublabel">30MB 이하 업로드 가능</span>
+        </div>
+
+        <div class="board-write-field">
+          <ol id="submitAttachmentList" class="board-attach-list"></ol>
+
+          <button type="button" id="submitAddAttachmentButton" class="board-attach-add">
+            + 첨부 칸 추가
+          </button>
+
+          <p class="board-write-hint">
+            첨부한 파일은 제출글을 볼 수 있는 구성원만 내려받을 수 있습니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="board-write-actions">
+        <a href="/activity.html" class="secondary board-list-button" id="submitCancelLink">취소</a>
+        <button type="submit" id="submitSaveButton">저장</button>
+      </div>
+
+      <p id="submitMessage" class="message activity-message" role="status" aria-live="polite"></p>
+
+    </form>
+
+    <p id="submitStateMessage" class="message activity-post-state" role="status" aria-live="polite">
+      과제를 불러오는 중...
+    </p>
+
+  </main>
+
+  <script type="module" src="/src/activity/submissionForm.js"></script>
+</body>
+
+</html>

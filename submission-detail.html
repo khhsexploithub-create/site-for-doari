@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>제출한 과제 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu nu-board">
+  <main class="nu-wrap feature-page board-page board-page-narrow nu-enter">
+    <a href="/activity.html" class="back-link" id="submissionBackLink">← 과제로 돌아가기</a>
+
+    <article id="submissionArticle" class="board-post" hidden>
+
+      <header class="board-post-head">
+        <p class="board-post-kind">
+          <span class="board-badge is-notice">제출</span>
+          <span id="submissionAssignmentTitle"></span>
+        </p>
+
+        <h1 id="submissionPostTitle">제목 없음</h1>
+
+        <div class="board-post-meta">
+          <span>작성자 <b id="submissionPostAuthor"></b></span>
+          <span>조회 <b id="submissionPostViews">0</b></span>
+          <span>등록일 <b id="submissionPostDate"></b></span>
+        </div>
+      </header>
+
+      <div class="board-post-body" id="submissionPostContent"></div>
+
+      <section class="board-attachments" id="submissionAttachments" aria-labelledby="submissionAttachmentsHeading" hidden>
+        <h2 id="submissionAttachmentsHeading">첨부파일</h2>
+        <ul id="submissionAttachmentList" class="board-attachment-list"></ul>
+      </section>
+
+      <div class="board-post-actions">
+        <a href="/activity.html" class="secondary board-list-button" id="submissionListLink">목록</a>
+        <button type="button" id="submissionDeleteButton" class="danger" hidden>삭제</button>
+      </div>
+
+    </article>
+
+    <p id="submissionStateMessage" class="message activity-post-state" role="status" aria-live="polite">
+      제출한 글을 불러오는 중...
+    </p>
+
+  </main>
+
+  <script type="module" src="/src/activity/submissionDetail.js"></script>
+</body>
+
+</html>

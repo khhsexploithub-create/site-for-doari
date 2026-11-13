@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>로그인 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu nu-account">
+
+  <main class="account-shell nu-enter">
+    <section class="account-hero">
+      <img class="account-hero-wave" src="/neoul-wave.png" alt="" aria-hidden="true">
+      <span class="nu-eyebrow">KYUNGHEE HIGH SCHOOL</span>
+      <p class="account-hero-title">너울</p>
+      <p class="account-hero-sub">제2대 동아리연합회</p>
+      <p class="account-hero-desc">동아리 운영에 필요한 기능을 하나의 공간에서 관리합니다.</p>
+    </section>
+
+    <form class="account-card" id="loginForm" novalidate>
+
+      <h1 class="account-title">로그인</h1>
+      <p class="account-lead">학교 동아리 계정으로 들어오세요.</p>
+
+      <label for="loginEmail">이메일
+        <input id="loginEmail" type="email" placeholder="name@example.com" autocomplete="email" required>
+      </label>
+
+      <label for="loginPassword">비밀번호
+        <div class="password-field">
+          <input id="loginPassword" type="password" placeholder="6자 이상 입력" autocomplete="current-password" required>
+          <button id="loginPasswordToggle" class="password-toggle" type="button" aria-controls="loginPassword"></button>
+        </div>
+      </label>
+
+      <button id="loginSubmitButton" type="submit">로그인</button>
+
+      <p id="loginMessage" class="message account-message" role="status" aria-live="polite"></p>
+
+      <p class="account-switch">
+        아직 계정이 없으신가요?
+        <a id="goToSignUp" href="/signup.html">회원가입</a>
+      </p>
+
+      <a class="account-browse" href="/">로그인 없이 둘러보기
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </a>
+
+    </form>
+
+    <p class="account-foot">Built by EXPLOIT HUB</p>
+  </main>
+
+  <script type="module" src="/src/auth/login.js"></script>
+</body>
+
+</html>

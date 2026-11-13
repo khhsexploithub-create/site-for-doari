@@ -1,0 +1,507 @@
+/* 통합 캘린더 — PC: 달력 | 그날 일정 / 모바일: 작은 달력 + 아래 그날 일정 */
+
+.nu .calendar-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  align-items: start;
+  gap: 16px;
+}
+
+.nu .calendar-page > .calendar-section:not(.calendar-agenda):not(:first-child) {
+  grid-column: 1 / -1;
+}
+
+.nu .calendar-section {
+  overflow: visible;
+}
+
+/* ---------- 달력 머리 ---------- */
+
+.nu .calendar-toolbar {
+  margin-bottom: 16px;
+}
+
+.nu .calendar-toolbar h2 {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.nu .calendar-heading-group p {
+  margin-top: 4px;
+  color: var(--nu-ink-3);
+}
+
+.nu .calendar-controls {
+  gap: 6px;
+}
+
+:where(.nu) .calendar-controls button {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+:where(.nu) .calendar-controls #todayButton {
+  border-color: transparent;
+  background: var(--nu-gray);
+}
+
+.nu .calendar-status:empty {
+  display: none;
+}
+
+/* ---------- 달력 칸 ---------- */
+
+.nu .calendar-scroll {
+  border: 1px solid var(--nu-line);
+  border-radius: 20px;
+  background: #ffffff;
+}
+
+.nu .calendar-weekdays span {
+  padding: 12px 6px;
+  border-right: 0;
+  background: #fafafc;
+  color: var(--nu-ink-3);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.nu .calendar-weekdays span:nth-child(6) { color: #4b4880; }
+.nu .calendar-weekdays span:nth-child(7) { color: #b42318; }
+
+.nu .calendar-day {
+  min-height: 118px;
+  padding: 8px;
+  border-top: 1px solid var(--nu-line);
+  border-right: 1px solid var(--nu-line);
+  transition: background 0.18s ease;
+}
+
+.nu .calendar-day:nth-child(7n) {
+  border-right: 0;
+}
+
+.nu .calendar-day:hover,
+.nu .calendar-day:focus-visible {
+  outline: 0;
+  background: #fafafc;
+  box-shadow: inset 0 0 0 2px rgba(43, 40, 112, 0.25);
+}
+
+.nu .calendar-day.is-outside {
+  background: #fcfcfe;
+  color: #b4b3c8;
+}
+
+.nu .calendar-day.is-today {
+  background: #ffffff;
+}
+
+.nu .calendar-day.is-selected {
+  background: #f3f2fc;
+  box-shadow: inset 0 0 0 2px var(--nu-accent);
+}
+
+.nu .calendar-date {
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.nu .calendar-day:nth-child(7n) .calendar-date { color: #b42318; }
+.nu .calendar-day.is-outside .calendar-date { color: inherit; }
+
+.nu .calendar-day.is-today .calendar-date {
+  background: var(--nu-accent);
+  color: #ffffff;
+  box-shadow: 0 6px 12px -6px rgba(43, 40, 112, 0.7);
+}
+
+/* ---------- 일정 조각 ---------- */
+
+:where(.nu) .calendar-event {
+  min-height: 0;
+  padding: 5px 7px;
+  border: 0;
+  border-left: 3px solid var(--nu-accent);
+  border-radius: 8px;
+  background: #ecebfb;
+  color: var(--nu-ink);
+  font-weight: 400;
+  text-align: left;
+  transition: transform 0.18s var(--nu-ease), filter 0.18s ease;
+}
+
+:where(.nu) .calendar-event:hover:not(:disabled) {
+  background: #e2e1f8;
+  transform: translateY(-1px);
+}
+
+.nu .calendar-event span {
+  color: var(--nu-ink-3);
+}
+
+.nu a.calendar-event.is-promo {
+  border-left-color: var(--nu-alert);
+  background: #fdf1dc;
+  color: #6b3a06;
+}
+
+.nu a.calendar-event.is-promo:hover {
+  background: #fbe6c4;
+}
+
+.nu .calendar-event.is-union {
+  border-left-color: var(--nu-ink);
+  background: var(--nu-ink);
+  color: #ffffff;
+}
+
+.nu .calendar-event.is-union span {
+  color: #c9c8e6;
+}
+
+.nu .calendar-event.is-union:hover {
+  background: #2b2a45;
+}
+
+/* 범례 */
+.nu .calendar-legend {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 12px;
+  color: var(--nu-ink-3);
+}
+
+.nu .calendar-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nu .calendar-legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: #ecebfb;
+  box-shadow: inset 3px 0 0 var(--nu-accent);
+}
+
+.nu .calendar-legend i.is-promo { background: #fdf1dc; box-shadow: inset 3px 0 0 var(--nu-alert); }
+.nu .calendar-legend i.is-union { background: var(--nu-ink); box-shadow: none; }
+
+/* ---------- 그날 일정 ---------- */
+
+.nu .calendar-agenda {
+  position: sticky;
+  top: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nu .calendar-agenda-eyebrow {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--nu-alert);
+}
+
+.nu .calendar-agenda h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.nu .agenda-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.nu .agenda-list > li {
+  animation: nu-rise 0.36s var(--nu-ease) both;
+}
+
+.nu .agenda-list > li:nth-child(2) { animation-delay: 0.04s; }
+.nu .agenda-list > li:nth-child(3) { animation-delay: 0.08s; }
+.nu .agenda-list > li:nth-child(4) { animation-delay: 0.12s; }
+
+:where(.nu) .agenda-list .calendar-event {
+  width: 100%;
+  padding: 12px 14px 12px 16px;
+  border: 1px solid var(--nu-line);
+  border-left: 4px solid var(--nu-accent);
+  border-radius: 16px;
+  background: #ffffff;
+  gap: 2px;
+}
+
+.nu .agenda-list .calendar-event {
+  display: grid;
+}
+
+.nu .event-promo-list .event-promo-empty {
+  grid-column: 1 / -1;
+}
+
+.nu .agenda-list .calendar-event strong {
+  order: -1;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.nu .agenda-list .calendar-event span {
+  display: inline;
+  font-size: 13px;
+}
+
+.nu .agenda-list a.calendar-event.is-promo {
+  border-left-color: var(--nu-alert);
+  background: #ffffff;
+  color: var(--nu-ink);
+}
+
+.nu .agenda-list .calendar-event.is-union {
+  border-left-color: var(--nu-ink);
+  background: #ffffff;
+  color: var(--nu-ink);
+}
+
+.nu .agenda-list .calendar-event.is-union span {
+  color: var(--nu-ink-3);
+}
+
+.nu .agenda-empty {
+  padding: 18px 12px;
+  border: 1.5px dashed var(--nu-field);
+  border-radius: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--nu-ink-3);
+}
+
+.nu .calendar-agenda-promo {
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 20px;
+  background: var(--nu-lilac);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--nu-ink);
+  transition: transform 0.2s var(--nu-ease), box-shadow 0.2s ease;
+}
+
+.nu .calendar-agenda-promo:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--nu-shadow-card);
+}
+
+.nu .calendar-agenda-promo-icon {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 14px;
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  color: var(--nu-accent);
+}
+
+.nu .calendar-agenda-promo span:last-child {
+  display: grid;
+  gap: 2px;
+  font-size: 13px;
+  color: var(--nu-ink-3);
+}
+
+.nu .calendar-agenda-promo strong {
+  font-size: 15px;
+  color: var(--nu-ink);
+}
+
+/* ---------- 일정 등록 · 행사 홍보 ---------- */
+
+.nu .event-promo-layout {
+  gap: 16px;
+}
+
+.nu .event-promo-form h3,
+.nu .event-promo-list-card h3 {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.nu .event-promo-list-card {
+  padding: 22px 24px;
+  border-radius: 22px;
+  background: #fafafc;
+  box-shadow: none;
+}
+
+/* 등록 칸이 숨겨져 있으면 목록이 한 줄을 다 쓴다. */
+.nu .event-promo-layout:has(> .event-promo-form[hidden]) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.nu .event-promo-layout:has(> .event-promo-form[hidden]) .event-promo-list-card {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.nu .event-promo-layout:has(> .event-promo-form[hidden]) .event-promo-list-card > h3,
+.nu .event-promo-layout:has(> .event-promo-form[hidden]) .event-promo-list-card > .subtext {
+  display: none;
+}
+
+.nu .event-promo-layout:has(> .event-promo-form[hidden]) .event-promo-list {
+  margin: 0;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+/* ---------- 모바일 ---------- */
+
+@media (max-width: 860px) {
+  .nu .calendar-page {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nu .calendar-agenda {
+    position: static;
+  }
+
+  .nu .calendar-toolbar {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .nu .calendar-heading-group {
+    flex: 1;
+  }
+
+  .nu .calendar-heading-group p {
+    display: none;
+  }
+
+  .nu .calendar-toolbar h2 {
+    font-size: 21px;
+  }
+
+  .nu .calendar-controls {
+    display: flex;
+  }
+
+  /* 이전 · 다음 달은 화살표만 남기고 글자는 숨긴다 */
+  .nu .calendar-controls button {
+    min-width: 38px;
+    min-height: 38px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+
+  .nu .calendar-controls :is(#previousMonthButton, #nextMonthButton) {
+    width: 38px;
+    padding: 0;
+    font-size: 0;
+    background: var(--nu-gray);
+    border-color: transparent;
+  }
+
+  .nu .calendar-controls #previousMonthButton::before { content: "‹"; font-size: 22px; line-height: 1; }
+  .nu .calendar-controls #nextMonthButton::before { content: "›"; font-size: 22px; line-height: 1; }
+
+  .nu .calendar-scroll {
+    overflow: hidden;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .nu .calendar-grid {
+    min-width: 0;
+  }
+
+  .nu .calendar-weekdays span {
+    padding: 6px 0;
+    background: none;
+  }
+
+  .nu .calendar-day {
+    min-height: 52px;
+    padding: 4px 0 6px;
+    border: 0;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .nu .calendar-day.is-outside {
+    background: none;
+  }
+
+  .nu .calendar-day.is-selected {
+    background: #f3f2fc;
+    box-shadow: inset 0 0 0 1.5px var(--nu-accent);
+  }
+
+  .nu .calendar-date {
+    margin: 0;
+  }
+
+  /* 칸 안의 일정은 점으로만 */
+  .nu .calendar-events {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+  }
+
+  :where(.nu) .calendar-events .calendar-event {
+    width: 6px;
+    height: 6px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--nu-accent);
+    overflow: hidden;
+    font-size: 0;
+    pointer-events: none;
+  }
+
+  .nu .calendar-events .calendar-event > * {
+    display: none;
+  }
+
+  .nu .calendar-events .calendar-event:nth-child(n + 4) {
+    display: none;
+  }
+
+  .nu .calendar-events a.calendar-event.is-promo { background: var(--nu-alert); }
+  .nu .calendar-events .calendar-event.is-union { background: var(--nu-ink); }
+
+  .nu .calendar-legend {
+    justify-content: center;
+  }
+
+  .nu .calendar-agenda {
+    padding: 20px 18px;
+  }
+
+  .nu .event-promo-layout:has(> .event-promo-form[hidden]) .event-promo-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

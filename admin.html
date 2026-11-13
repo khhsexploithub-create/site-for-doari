@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>관리자 대시보드 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu nu-admin">
+
+  <main class="nu-wrap page admin-dashboard-page">
+
+    <!-- ================================
+         관리자 로그인
+    ================================= -->
+    <section id="loginSection" class="card">
+
+      <h1>관리자 로그인</h1>
+
+      <p class="subtext">관리자 계정으로 로그인하세요.</p>
+
+      <form id="loginForm">
+
+        <label>
+          이메일
+          <input id="email" type="email" autocomplete="username" required>
+        </label>
+
+        <label>
+          비밀번호
+          <div class="password-field">
+            <input id="password" type="password" autocomplete="current-password" required>
+            <button id="passwordToggle" class="password-toggle" type="button" aria-controls="password"></button>
+          </div>
+        </label>
+
+        <button type="submit">로그인</button>
+
+        <p id="loginMessage" class="message"></p>
+
+      </form>
+
+    </section>
+
+
+    <!-- ================================
+         관리자 대시보드
+    ================================= -->
+    <section id="adminSection" class="hidden">
+
+      <header class="admin-header dashboard-header">
+        <div>
+          <p class="portal-label">CLUB ONLINE INFRASTRUCTURE</p>
+          <h1>관리자 대시보드</h1>
+          <p class="subtext">통합 온라인 인프라 운영 기능을 관리합니다.</p>
+          <span class="admin-access-label" id="adminAccessLabel"></span>
+        </div>
+
+        <div class="admin-header-actions">
+          <a href="/" class="portal-my-link">← 홈으로</a>
+          <button id="logoutButton" class="secondary">로그아웃</button>
+        </div>
+      </header>
+
+
+      <nav class="admin-menu" aria-label="관리 메뉴">
+
+        <button type="button" class="admin-menu-card active" data-admin-target="budgetManagement">
+          <strong>01 예산 관리</strong>
+          <span>승인 · 연합회장 확인 · 처리</span>
+        </button>
+
+        <button type="button" class="admin-menu-card" data-admin-target="activityManagement">
+          <strong>02 동아리 공지 관리</strong>
+          <span>수정 · 삭제 · 조회수</span>
+        </button>
+
+        <button type="button" class="admin-menu-card" data-admin-target="resourceManagement">
+          <strong>03 자원 예약 관리</strong>
+          <span>예약 승인 · 반려</span>
+        </button>
+
+        <button type="button" class="admin-menu-card" data-admin-target="scheduleManagement">
+          <strong>04 일정 관리</strong>
+          <span>일정 수정 · 삭제</span>
+        </button>
+
+        <button type="button" class="admin-menu-card" data-admin-target="eventManagement">
+          <strong>05 행사 홍보 관리</strong>
+          <span>행사 등록 · 삭제</span>
+        </button>
+
+        <button type="button" class="admin-menu-card" data-admin-target="userManagement">
+          <strong>06 계정 권한 관리</strong>
+          <span>연합회 임원 지정</span>
+        </button>
+
+      </nav>
+
+
+      <!-- 01 예산 관리 -->
+      <section id="budgetManagement" class="admin-management-section budget-admin-section">
+
+        <div class="admin-section-heading budget-section-heading">
+          <div>
+            <h2>예산 신청 관리</h2>
+            <p class="subtext">신청 → 승인 → 연합회장 확인 → 처리 → 처리 완료 순서로 예산을 관리합니다.</p>
+          </div>
+          <button id="refreshButton" class="secondary">새로고침</button>
+        </div>
+
+        <!-- [승인 예산] · [처리 완료 예산] 현황 — Firestore 실시간 (src/admin/budgetFlow.js 가 채운다) -->
+        <section id="budgetOverview" class="budget-overview" aria-label="예산 현황"></section>
+
+        <p id="budgetReviewNotice" class="admin-readonly-notice" role="note" hidden></p>
+
+        <section id="budgetPasswordBox" class="admin-permission-box budget-password-box" hidden>
+          <div class="admin-permission-title">신청 비밀번호 설정 (관리자 전용)</div>
+          <p class="admin-permission-hint">
+            동아리 부장만 예산을 신청할 수 있도록 거는 비밀번호입니다.
+            연합회장이 각 동아리 부장에게 직접 전달하세요.
+          </p>
+
+          <p id="budgetPasswordState" class="admin-permission-state">확인 중...</p>
+
+          <label class="admin-edit-field" for="budgetPasswordInput">
+            새 비밀번호 (4자 이상)
+            <div class="password-field">
+              <input id="budgetPasswordInput" type="password" autocomplete="new-password" placeholder="새 비밀번호를 입력하세요">
+              <button id="budgetPasswordToggle" class="password-toggle" type="button" aria-controls="budgetPasswordInput"></button>
+            </div>
+          </label>
+
+          <button id="budgetPasswordSaveButton" type="button">비밀번호 저장</button>
+          <p id="budgetPasswordMessage" class="message admin-card-message-line" role="status" aria-live="polite"></p>
+
+          <div class="admin-permission-title budget-review-password-title">심사 비밀번호 변경 (예산관리소위원회 공통)</div>
+          <p class="admin-permission-hint">
+            승인 · 반려 전에 넣는 비밀번호입니다. 바꾸면 지금 심사 중인 사람도 모두 다시 넣어야 합니다.
+          </p>
+
+          <label class="admin-edit-field" for="reviewPasswordInput">
+            새 심사 비밀번호 (6자 이상)
+            <div class="password-field">
+              <input id="reviewPasswordInput" type="password" autocomplete="new-password" placeholder="새 심사 비밀번호">
+              <button id="reviewPasswordToggle" class="password-toggle" type="button" aria-controls="reviewPasswordInput"></button>
+            </div>
+          </label>
+
+          <button id="reviewPasswordSaveButton" type="button">심사 비밀번호 저장</button>
+          <p id="reviewPasswordMessage" class="message admin-card-message-line" role="status" aria-live="polite"></p>
+        </section>
+
+        <!-- 심사 절차 + 심사 비밀번호 (승인권자에게만 보인다) -->
+        <section id="budgetReviewLock" class="budget-review-lock" hidden aria-labelledby="budgetReviewLockTitle">
+          <div class="budget-review-steps">
+            <p class="budget-review-steps-title" id="budgetReviewLockTitle">심사 절차</p>
+            <ol>
+              <li><b>심사 비밀번호</b>를 넣고 심사를 시작해요. (12시간 유지)</li>
+              <li>품목마다 <b>승인 · 반려</b>를 눌러요. 반려한 품목엔 사유를 적어요.</li>
+              <li>긴급 신청은 <b>승인 사유</b>를 먼저 적어야 처리돼요. 자기 동아리 건은 반려만 할 수 있어요.</li>
+              <li>승인된 건은 연합회장이 <b>연합회장 확인</b>을 누르고, 선생님이 처리한 뒤 <b>처리 완료</b>를 눌러요. (확인 창에서 한 번 더 확인)</li>
+            </ol>
+          </div>
+
+          <form class="budget-review-unlock" id="budgetReviewUnlockForm">
+            <label for="budgetReviewPassword">
+              심사 비밀번호
+              <div class="password-field">
+                <input id="budgetReviewPassword" type="password" autocomplete="off" placeholder="예산관리소위원회 공통 비밀번호">
+                <button id="budgetReviewPasswordToggle" class="password-toggle" type="button" aria-controls="budgetReviewPassword"></button>
+              </div>
+            </label>
+            <button type="submit" id="budgetReviewUnlockButton">심사 시작</button>
+            <p id="budgetReviewLockMessage" class="message" role="status" aria-live="polite"></p>
+          </form>
+
+          <div class="budget-review-unlocked" id="budgetReviewUnlocked" hidden>
+            <span class="budget-review-state">
+              <span class="budget-review-dot" aria-hidden="true"></span>
+              심사 중 · <b id="budgetReviewUntil"></b>까지
+            </span>
+            <button type="button" id="budgetReviewLockButton" class="secondary">심사 마치기</button>
+          </div>
+        </section>
+
+        <div class="budget-admin-stats">
+          <article><strong id="budgetTotalCount">0</strong><span>전체 신청</span></article>
+          <article><strong id="budgetPendingCount">0</strong><span>대기</span></article>
+          <article><strong id="budgetApprovedCount">0</strong><span>승인</span></article>
+          <article><strong id="budgetRejectedCount">0</strong><span>반려</span></article>
+          <article><strong id="budgetAssemblyCount">0</strong><span>안건 상정</span></article>
+          <article><strong id="budgetConfirmedCount">0</strong><span>연합회장 확인</span></article>
+          <article><strong id="budgetCompletedCount">0</strong><span>처리 완료</span></article>
+        </div>
+
+        <!-- 전체 · 다음 토요일 회의 안건 · 긴급 · 일반 (admin.js 가 채운다) -->
+        <div id="budgetFilterBar" class="budget-filter-bar" role="group" aria-label="예산 신청 거르기"></div>
+
+        <div id="budgetRequestList" class="admin-card-list budget-request-list"></div>
+
+      </section>
+
+
+      <!-- 02 동아리 공지 관리 -->
+      <section id="activityManagement" class="admin-management-section hidden">
+
+        <div class="admin-section-heading">
+          <div>
+            <h2>동아리 공지 관리</h2>
+            <p class="subtext">등록된 동아리 공지를 수정하거나 삭제하고 조회수를 확인합니다.</p>
+          </div>
+          <button id="activityAdminRefreshButton" class="secondary">새로고침</button>
+        </div>
+
+        <div class="budget-admin-stats">
+          <article><strong id="activityTotalCount">0</strong><span>전체 공지</span></article>
+          <article><strong id="activityTotalViews">0</strong><span>총 조회수</span></article>
+          <article><strong id="activityTopViews">0</strong><span>최다 조회수</span></article>
+        </div>
+
+        <label class="admin-filter-label" for="activityAdminSearch">
+          검색 (동아리 이름 · 제목)
+          <input id="activityAdminSearch" type="search" placeholder="검색어를 입력하세요">
+        </label>
+
+        <div id="activityAdminList" class="admin-card-list"></div>
+
+      </section>
+
+
+      <!-- 03 자원 예약 관리 -->
+      <section id="resourceManagement" class="admin-management-section hidden">
+
+        <div class="admin-section-heading">
+          <div>
+            <h2>자원 예약 관리</h2>
+            <p class="subtext">예약 신청을 확인하고 사유와 함께 승인 또는 반려합니다.</p>
+          </div>
+          <button id="reservationAdminRefreshButton" class="secondary">새로고침</button>
+        </div>
+
+        <p id="reservationReviewNotice" class="admin-readonly-notice" role="note" hidden></p>
+
+        <!-- 신청 항목별 자동승인 (관리자 전용) -->
+        <section id="autoApprovalPanel" class="admin-card auto-approval-panel" aria-labelledby="autoApprovalHeading" hidden>
+          <h3 id="autoApprovalHeading">신청 항목별 자동승인</h3>
+          <p class="subtext">
+            모든 항목은 기본적으로 관리자 승인을 기다립니다. 켠 항목만 신청 즉시 승인되며,
+            바꾼 뒤에 들어오는 신규 신청부터 적용됩니다. 이미 접수된 신청은 그대로입니다.
+            교육 이수 조건과 예약 시간 중복 확인은 자동승인과 상관없이 그대로 적용됩니다.
+          </p>
+          <div id="autoApprovalList" class="auto-approval-list"></div>
+          <p id="autoApprovalMessage" class="message admin-card-message-line" role="status" aria-live="polite"></p>
+        </section>
+
+        <div class="budget-admin-stats">
+          <article><strong id="reservationTotalCount">0</strong><span>전체 예약</span></article>
+          <article><strong id="reservationPendingCount">0</strong><span>대기</span></article>
+          <article><strong id="reservationApprovedCount">0</strong><span>승인</span></article>
+          <article><strong id="reservationRejectedCount">0</strong><span>반려</span></article>
+        </div>
+
+        <label class="admin-filter-label" for="reservationAdminStatusFilter">
+          상태 필터
+          <select id="reservationAdminStatusFilter">
+            <option value="">전체</option>
+            <option value="pending">승인 대기</option>
+            <option value="approved">승인됨</option>
+            <option value="rejected">반려됨</option>
+          </select>
+        </label>
+
+        <div id="reservationAdminList" class="admin-card-list"></div>
+
+      </section>
+
+
+      <!-- 04 일정 관리 -->
+      <section id="scheduleManagement" class="admin-management-section hidden">
+
+        <div class="admin-section-heading">
+          <div>
+            <h2>통합 활동 캘린더 관리</h2>
+            <p class="subtext">캘린더에 등록된 일정을 수정하거나 삭제합니다.</p>
+          </div>
+          <button id="scheduleAdminRefreshButton" class="secondary">새로고침</button>
+        </div>
+
+        <div class="budget-admin-stats">
+          <article><strong id="scheduleTotalCount">0</strong><span>전체 일정</span></article>
+          <article><strong id="scheduleUpcomingCount">0</strong><span>예정된 일정</span></article>
+          <article><strong id="schedulePastCount">0</strong><span>지난 일정</span></article>
+        </div>
+
+        <label class="admin-filter-label" for="scheduleAdminSearch">
+          검색 (동아리 이름 · 제목 · 날짜)
+          <input id="scheduleAdminSearch" type="search" placeholder="검색어를 입력하세요">
+        </label>
+
+        <div id="scheduleAdminList" class="admin-card-list"></div>
+
+      </section>
+
+      <!-- 05 계정 권한 관리 -->
+      <!-- 05 행사 홍보 관리 -->
+      <section id="eventManagement" class="admin-management-section hidden">
+
+        <div class="admin-section-heading">
+          <div>
+            <h2>행사 홍보 관리</h2>
+            <p class="subtext">캘린더에서 등록된 행사 홍보를 수정하거나 삭제합니다.</p>
+          </div>
+          <button id="eventAdminRefreshButton" class="secondary">새로고침</button>
+        </div>
+
+        <p id="eventAdminNotice" class="admin-readonly-notice" role="note" hidden></p>
+
+        <div class="budget-admin-stats">
+          <article><strong id="eventTotalCount">0</strong><span>전체 행사</span></article>
+          <article><strong id="eventUpcomingCount">0</strong><span>예정된 행사</span></article>
+          <article><strong id="eventPastCount">0</strong><span>지난 행사</span></article>
+        </div>
+
+        <label class="admin-filter-label" for="eventAdminSearch">
+          검색 (동아리 이름 · 행사 이름 · 날짜)
+          <input id="eventAdminSearch" type="search" placeholder="검색어를 입력하세요">
+        </label>
+
+        <div id="eventAdminList" class="admin-card-list"></div>
+
+      </section>
+
+
+      <section id="userManagement" class="admin-management-section hidden">
+
+        <div class="admin-section-heading">
+          <div>
+            <h2>계정 권한 관리</h2>
+            <p class="subtext">소위원회 구성과 계정 권한, 소속 동아리를 한곳에서 관리합니다.</p>
+          </div>
+          <div class="admin-heading-actions">
+            <button id="userExportButton" class="secondary">↓ 계정 목록 내보내기</button>
+            <button id="userAdminRefreshButton" class="secondary">새로고침</button>
+          </div>
+        </div>
+
+        <!-- 소위원회 구성 -->
+        <section class="admin-panel">
+          <div class="admin-panel-head">
+            <h3>소위원회 구성</h3>
+            <p class="subtext">카드를 누르면 아래 목록이 해당 소위원회로 걸러집니다</p>
+          </div>
+          <div id="subcommitteeBoard" class="subcommittee-board"></div>
+        </section>
+
+        <div class="user-admin-layout">
+
+          <section class="admin-panel user-admin-main">
+
+            <div id="userScopeTabs" class="user-scope-tabs" role="tablist" aria-label="계정 구분"></div>
+
+            <div class="user-filter-row">
+              <input id="userAdminSearch" type="search" placeholder="🔍 이름 · 학번 · 이메일">
+              <select id="userGradeFilter" aria-label="학년">
+                <option value="">학년 전체</option>
+                <option value="1">1학년</option>
+                <option value="2">2학년</option>
+                <option value="3">3학년</option>
+              </select>
+              <select id="userSubcommitteeFilter" aria-label="소위원회"></select>
+              <select id="userPermissionFilter" aria-label="권한">
+                <option value="">권한 전체</option>
+                <option value="printer">3D 프린터 허용</option>
+                <option value="notice">공지 작성</option>
+                <option value="leader">동아리 부장</option>
+                <option value="chair">소위원장</option>
+              </select>
+              <select id="userSortSelect" aria-label="정렬">
+                <option value="studentId">정렬: 학번순</option>
+                <option value="name">정렬: 이름순</option>
+                <option value="createdAt">정렬: 가입순</option>
+              </select>
+            </div>
+
+            <div id="userFlagChips" class="user-flag-chips"></div>
+
+            <div id="userBulkBar" class="user-bulk-bar" hidden></div>
+
+            <div class="user-table-wrap">
+              <table class="user-admin-table">
+                <thead>
+                  <tr>
+                    <th scope="col" class="user-cell-check">
+                      <input type="checkbox" id="userSelectAll" aria-label="전체 선택">
+                    </th>
+                    <th scope="col">이름 / 이메일</th>
+                    <th scope="col" class="user-cell-id">학번</th>
+                    <th scope="col" class="user-cell-kind">구분</th>
+                    <th scope="col" class="user-cell-club">동아리</th>
+                    <th scope="col" class="user-cell-sub">소위원회</th>
+                    <th scope="col" class="user-cell-toggle">3D프린터</th>
+                    <th scope="col" class="user-cell-toggle">공지</th>
+                    <th scope="col" class="user-cell-date">가입</th>
+                  </tr>
+                </thead>
+                <tbody id="userAdminTableBody" aria-live="polite">
+                  <tr class="user-empty-row"><td colspan="9">계정을 불러오는 중...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p id="userAdminFootNote" class="user-admin-footnote"></p>
+
+          </section>
+
+          <aside class="admin-panel user-admin-detail" id="userAdminDetail" aria-live="polite"></aside>
+
+        </div>
+
+        <p class="admin-readonly-notice">
+          이 목록은 권한 기록(Firestore)을 보여줍니다. Firebase Authentication 에서 로그인 계정을 지워도
+          권한 기록은 남으므로, 완전히 없애려면 <strong>Authentication 에서 먼저 삭제한 뒤 '계정 기록 삭제'</strong>를 눌러주세요.
+        </p>
+
+      </section>
+
+    </section>
+
+  </main>
+
+
+  <script type="module" src="/src/admin.js"></script>
+
+</body>
+
+</html>

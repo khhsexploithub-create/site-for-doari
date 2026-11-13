@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>소위원회 권한 페이지 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu">
+  <main class="nu-wrap feature-page nu-enter">
+    <header class="nu-pagehead">
+      <img class="nu-pagehead-wave" src="/neoul-wave.png" alt="" aria-hidden="true">
+      <a href="/" class="nu-back" aria-label="홈으로">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </a>
+      <p class="nu-crumb"><a href="/">홈</a> › 소위원회 권한 페이지</p>
+      <h1>소위원회 권한 페이지</h1>
+      <p class="nu-pagehead-desc">소속된 소위원회를 선택하면 담당 관리 항목으로 이동합니다.</p>
+    </header>
+
+    <section class="feature-content subcommittee-page">
+
+      <p id="subcommitteeMessage" class="message subcommittee-message" role="status" aria-live="polite">
+        권한을 확인하는 중...
+      </p>
+
+      <div id="subcommitteeList" class="subcommittee-list"></div>
+
+    </section>
+  </main>
+
+  <script type="module" src="/src/subcommittee.js"></script>
+</body>
+
+</html>

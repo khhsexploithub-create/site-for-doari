@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>예산 관리 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu">
+
+  <main class="nu-wrap budget-e nu-enter">
+
+    <header class="nu-pagehead">
+      <img class="nu-pagehead-wave" src="/neoul-wave.png" alt="" aria-hidden="true">
+      <a href="/" class="nu-back" aria-label="홈으로">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </a>
+      <p class="nu-crumb"><a href="/">홈</a> › 예산 신청 / 기록</p>
+      <h1>예산 신청 / 기록</h1>
+      <p class="nu-pagehead-desc">동아리 예산을 신청하고 사용 내역을 관리하는 공간입니다.</p>
+    </header>
+
+    <!-- 전체 동아리 예산 현황은 관리자 화면 '01 예산 관리'로 옮겼다. (src/admin/budgetFlow.js) -->
+
+    <form id="budgetRequestForm" class="budget-form budget-sheet-form budget-form-e">
+
+        <h2>새 예산 신청</h2>
+
+        <p class="budget-form-notice">
+          예산을 신청하기 전에 다시 검토해주세요. 부장만이 대표하여 신청할 수 있습니다.
+        </p>
+
+        <p id="budgetAuthMessage" class="message budget-message" role="status" aria-live="polite"></p>
+
+        <!-- 신청 종류: 일반(토요일 회의 심의) · 긴급(바로 승인, 규칙 있음) -->
+        <fieldset class="budget-type">
+          <legend>신청 종류</legend>
+          <div class="budget-type-options">
+            <label class="budget-type-option">
+              <input type="radio" name="requestType" value="normal" checked>
+              <span class="budget-type-card">
+                <span class="budget-type-title">일반 신청</span>
+                <span class="budget-type-desc">토요일 예산 소위원회 회의에서 심의해요</span>
+              </span>
+            </label>
+            <label class="budget-type-option is-urgent">
+              <input type="radio" name="requestType" value="urgent" id="budgetUrgentRadio">
+              <span class="budget-type-card">
+                <span class="budget-type-title">긴급 신청 <em class="budget-type-quota" id="budgetUrgentQuota">한 달에 1번</em></span>
+                <span class="budget-type-desc">회의를 기다릴 수 없을 때만 · 연합회장/예산 소위원장이 바로 승인</span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
+        <p class="budget-type-note" id="budgetNormalNote">
+          금요일 18시까지 낸 신청은 <b data-meeting-label>이번 주 토요일</b> 회의에서 심의해요. 결과는 회의 뒤에 알림으로 와요.
+        </p>
+
+        <section class="budget-urgent" id="budgetUrgentBox" hidden aria-labelledby="budgetUrgentRulesTitle">
+          <div class="budget-urgent-rules">
+            <p class="budget-urgent-rules-title" id="budgetUrgentRulesTitle">긴급 신청 규칙</p>
+            <ol>
+              <li>다음 회의인 <b data-meeting-label>토요일</b> <b>전에</b> 꼭 필요한 경우만 낼 수 있어요.</li>
+              <li>총액 <b>10만 원 이하</b>만 가능해요.</li>
+              <li>동아리마다 <b>한 달에 1번</b>이에요. 반려돼도 횟수는 쓴 것으로 봐요.</li>
+              <li>연합회장 또는 예산 소위원장이 <b>승인 사유를 남기고</b> 승인해요. 자기 동아리 신청은 처리할 수 없어요.</li>
+              <li>승인된 긴급 건은 다음 토요일 회의에 <b>사후 보고</b>돼요.</li>
+            </ol>
+          </div>
+
+          <div class="budget-urgent-fields">
+            <label for="urgentNeededBy">
+              필요한 날짜
+              <input id="urgentNeededBy" type="date">
+            </label>
+            <label for="urgentReason">
+              <span class="budget-urgent-label">긴급한 이유 <small id="urgentReasonCount">0 / 20자 이상</small></span>
+              <textarea id="urgentReason" maxlength="500" rows="3"
+                placeholder="왜 토요일 회의까지 기다릴 수 없는지 적어주세요. 예: 금요일 대회에 쓸 센서가 고장 나서 대회 전에 다시 사야 해요."></textarea>
+            </label>
+          </div>
+        </section>
+
+        <div class="budget-head-fields">
+          <label for="clubName">
+            동아리명
+            <select id="clubName" name="clubName" required></select>
+          </label>
+
+          <label for="requesterName">
+            신청자명
+            <input id="requesterName" name="requesterName" type="text" placeholder="예: 홍길동" required>
+          </label>
+
+          <label for="requestPassword">
+            신청 비밀번호
+            <div class="password-field">
+              <input
+                id="requestPassword"
+                name="requestPassword"
+                type="password"
+                autocomplete="off"
+                placeholder="연합회장에게 전달받은 비밀번호"
+                required
+              >
+              <button id="requestPasswordToggle" class="password-toggle" type="button" aria-controls="requestPassword"></button>
+            </div>
+          </label>
+        </div>
+
+        <div class="budget-sheet-head">
+          <h2>신청 품목</h2>
+          <div class="budget-sheet-actions">
+            <button type="button" id="budgetTemplateButton" class="secondary">↓ 신청 양식 (.xlsx)</button>
+            <button type="button" id="budgetUploadButton" class="secondary">↑ 엑셀 불러오기</button>
+            <input id="budgetUploadInput" type="file" accept=".xlsx,.xls,.csv" hidden>
+          </div>
+        </div>
+
+        <div class="budget-sheet-wrap">
+          <table class="budget-sheet">
+            <thead>
+              <tr>
+                <th scope="col" class="sheet-cell-number">#</th>
+                <th scope="col" class="sheet-cell-kind">종류</th>
+                <th scope="col" class="sheet-cell-name">품목</th>
+                <th scope="col" class="sheet-cell-number-input">수량</th>
+                <th scope="col" class="sheet-cell-number-input">단가</th>
+                <th scope="col" class="sheet-cell-amount">금액 (자동)</th>
+                <th scope="col" class="sheet-cell-link">구매 링크</th>
+                <th scope="col" class="sheet-cell-description">세부 내용 (사용 목적)</th>
+                <th scope="col" class="sheet-cell-remove"><span class="sr-only">행 지우기</span></th>
+              </tr>
+            </thead>
+            <tbody id="budgetSheetBody"></tbody>
+            <tfoot>
+              <tr>
+                <td class="sheet-cell-number">+</td>
+                <td colspan="8" class="budget-sheet-foot">
+                  마지막 칸에서 <b>Tab</b>이나 <b>Enter</b>를 누르면 새 행이 생겨요 ·
+                  품목 칸을 오른쪽 클릭하면 <b>배송비 행</b>을 넣을 수 있어요
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="budget-sheet-tools">
+          <button type="button" id="budgetAddRowButton">+ 행 추가</button>
+          <p class="budget-paste-hint">
+            엑셀 · 구글시트에서 <b>품목 ~ 세부 내용</b> 칸을 복사해 표를 누르고
+            <kbd>Ctrl</kbd> + <kbd>V</kbd> 하면 여러 줄이 한 번에 들어가요.
+          </p>
+        </div>
+
+        <div class="budget-sheet-summary">
+          <div class="budget-kind-totals" id="budgetKindTotals"></div>
+          <p id="budgetSheetError" class="budget-sheet-error" role="status" aria-live="polite"></p>
+          <div class="budget-sheet-total">
+            <span id="budgetItemsCount">0개 품목 · 합계</span>
+            <strong id="budgetItemsTotal">₩0</strong>
+          </div>
+        </div>
+
+        <button id="budgetSubmitButton" class="nu-btn" type="submit">예산 신청</button>
+
+        <p id="budgetResultMessage" class="message budget-message" role="status" aria-live="polite"></p>
+
+      </form>
+
+    <div class="budget-lists">
+      <article class="my-budget-requests-card nu-card budget-side-card">
+        <h2>내 예산 신청</h2>
+        <ul id="myBudgetRequestsList" class="my-budget-requests-list" aria-live="polite"></ul>
+      </article>
+
+      <!-- 연합회 임원에게만 보인다 (budget.js) -->
+      <article class="budget-record-card nu-card budget-record-e" id="budgetRecordCard">
+        <h2>최근 기록</h2>
+        <p class="subtext budget-record-subtext">모든 동아리의 승인 · 연합회장 확인 · 처리 완료 기록을 함께 확인합니다.</p>
+        <ul id="budgetRecordList" class="budget-record-list" aria-live="polite">
+          <li>예산 기록을 불러오는 중...</li>
+        </ul>
+      </article>
+    </div>
+
+  </main>
+
+  <script type="module" src="/src/budget/budget.js"></script>
+
+</body>
+
+</html>

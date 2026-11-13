@@ -1,0 +1,169 @@
+/* ==========================================================
+   움직임 (모든 페이지 공통)
+
+   1. 페이지 이동: View Transitions (크롬 · 엣지 · 사파리 18.2+)
+      - 지원하지 않는 브라우저는 아래 '처음 등장' 애니메이션으로 대신한다.
+   2. 버튼 · 카드 · 입력칸: 누르고 올렸을 때의 반응
+   3. 대화상자: 열릴 때 살짝 커지며 나타남
+   4. '동작 줄이기'를 켠 사용자에게는 모두 끈다.
+   ========================================================== */
+
+:root {
+  --nu-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --nu-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --nu-spring: cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+/* ---------- 1. 페이지 이동 ---------- */
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-group(*) {
+  animation-duration: 0.42s;
+  animation-timing-function: var(--nu-ease);
+}
+
+::view-transition-old(root) {
+  animation: nu-page-out 0.2s var(--nu-ease-in) both;
+}
+
+::view-transition-new(root) {
+  animation: nu-page-in 0.38s var(--nu-ease) both;
+}
+
+/* 홈의 큰 머리 ↔ 각 페이지의 머리가 서로 이어지며 크기와 자리를 바꾼다. */
+::view-transition-old(nu-head),
+::view-transition-new(nu-head) {
+  height: 100%;
+  object-fit: cover;
+  object-position: left top;
+}
+
+/* 아래 메뉴 · 위 메뉴는 따로 떼어 두어, 페이지가 바뀌어도 제자리에 머문다.
+   (홈에서 넘어올 때처럼 한쪽에만 있으면 부드럽게 나타난다.) */
+
+@keyframes nu-page-out {
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.995);
+  }
+}
+
+@keyframes nu-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+/* 페이지 이동 효과가 없었을 때(첫 방문, 미지원 브라우저)만 처음 등장 효과를 준다.
+   html.nu-vt 는 각 페이지 <head> 의 짧은 스크립트가 붙인다. */
+html:not(.nu-vt) .nu-enter > * {
+  animation: nu-rise 0.6s var(--nu-ease) both;
+}
+
+html:not(.nu-vt) .nu-enter > *:nth-child(2) { animation-delay: 0.05s; }
+html:not(.nu-vt) .nu-enter > *:nth-child(3) { animation-delay: 0.1s; }
+html:not(.nu-vt) .nu-enter > *:nth-child(4) { animation-delay: 0.15s; }
+html:not(.nu-vt) .nu-enter > *:nth-child(5) { animation-delay: 0.2s; }
+html:not(.nu-vt) .nu-enter > *:nth-child(6) { animation-delay: 0.25s; }
+html:not(.nu-vt) .nu-enter > *:nth-child(7) { animation-delay: 0.3s; }
+html:not(.nu-vt) .nu-enter > *:nth-child(n + 8) { animation-delay: 0.34s; }
+
+@keyframes nu-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+/* ---------- 2. 누르고 올렸을 때 ---------- */
+
+button,
+.nu-press {
+  transition:
+    transform 0.18s var(--nu-ease),
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.25s var(--nu-ease);
+}
+
+button:not(:disabled):active,
+.nu-press:active {
+  transform: scale(0.97);
+  transition-duration: 0.08s;
+}
+
+input,
+select,
+textarea {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.25s var(--nu-ease),
+    background-color 0.2s ease;
+}
+
+/* ---------- 3. 대화상자 ---------- */
+
+dialog[open] {
+  animation: nu-pop-in 0.32s var(--nu-ease) both;
+}
+
+dialog[open]::backdrop {
+  animation: nu-fade-in 0.25s ease both;
+}
+
+@keyframes nu-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+}
+
+@keyframes nu-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* 너울 로고가 천천히 일렁인다. */
+@keyframes nu-float {
+  50% {
+    translate: 0 -6px;
+    rotate: -1deg;
+  }
+}
+
+/* 모바일 대화상자는 아래에서 올라온다. */
+@keyframes nu-sheet-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+}
+
+/* 숫자 배지가 새로 생길 때 톡 튀어나온다. */
+@keyframes nu-badge-pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ---------- 4. 동작 줄이기 ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

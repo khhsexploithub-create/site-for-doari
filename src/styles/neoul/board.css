@@ -1,0 +1,791 @@
+/* 동아리 활동 — 목록(과제 · 공지), 과제 상세, 제출하기, 글 상세, 행사 상세 */
+
+.nu main.board-page {
+  width: auto;
+}
+
+.nu main.board-page-narrow {
+  max-width: 924px;
+}
+
+/* ---------- 목록 카드 ---------- */
+
+.nu .board-card {
+  padding-top: 20px;
+}
+
+.nu .board-tabs {
+  width: fit-content;
+  padding: 4px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--nu-gray);
+  display: flex;
+  gap: 2px;
+}
+
+:where(.nu) .board-tab {
+  min-height: 42px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--nu-ink-3);
+  font-size: 14px;
+  font-weight: 700;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+:where(.nu) .board-tab:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--nu-ink);
+}
+
+:where(.nu) .board-tab.is-active,
+:where(.nu) .board-tab.is-active:hover {
+  background: #ffffff;
+  color: var(--nu-ink);
+  box-shadow: 0 1px 2px rgba(22, 21, 43, 0.08), 0 6px 14px -8px rgba(22, 21, 43, 0.3);
+}
+
+.nu .board-panel:not([hidden]) {
+  animation: nu-rise 0.32s var(--nu-ease) both;
+}
+
+.nu .board-club-notice {
+  margin: 14px 0 0;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: var(--nu-r-field);
+  background: #fdf1dc;
+  color: #6b3a06;
+}
+
+.nu .board-subtabs {
+  padding: 14px 0 0;
+  gap: 6px;
+}
+
+:where(.nu) .board-subtab {
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--nu-field);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--nu-ink-3);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+:where(.nu) .board-subtab:hover:not(:disabled) {
+  border-color: #c9cadb;
+  background: #fafafc;
+  color: var(--nu-ink);
+}
+
+:where(.nu) .board-subtab.is-active,
+:where(.nu) .board-subtab.is-active:hover {
+  border-color: var(--nu-ink);
+  background: var(--nu-ink);
+  color: #ffffff;
+}
+
+/* 도구 줄 */
+.nu .board-toolbar {
+  padding: 16px 0;
+}
+
+.nu .board-filters :is(select, input[type="search"]) {
+  min-width: 132px;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.nu .board-filters select {
+  padding-right: 30px;
+}
+
+.nu .board-count {
+  color: var(--nu-ink-3);
+}
+
+.nu .board-count b {
+  color: var(--nu-ink);
+}
+
+:where(.nu) :is(.board-my-button, .board-write-button) {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+:where(.nu) .board-my-button {
+  border: 1px solid var(--nu-field);
+  background: #ffffff;
+  color: var(--nu-ink);
+}
+
+:where(.nu) .board-my-button:hover:not(:disabled) {
+  border-color: #c9cadb;
+  background: #fafafc;
+}
+
+:where(.nu) .board-my-button.is-active,
+:where(.nu) .board-my-button.is-active:hover {
+  border-color: var(--nu-accent);
+  background: var(--nu-accent);
+  color: #ffffff;
+}
+
+:where(.nu) .board-write-button {
+  background: var(--nu-accent);
+  color: #ffffff;
+  box-shadow: var(--nu-shadow-btn);
+}
+
+:where(.nu) .board-write-button:hover:not(:disabled) {
+  background: var(--nu-accent-hover);
+}
+
+/* ---------- 표 ---------- */
+
+.nu .board-table-wrap {
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.nu .board-table thead th {
+  padding: 12px 10px;
+  border-top: 0;
+  border-bottom: 1px solid var(--nu-line);
+  background: none;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--nu-ink-3);
+}
+
+.nu .board-table tbody tr {
+  height: 68px;
+}
+
+.nu .board-table td {
+  border-bottom: 1px solid var(--nu-line);
+  color: var(--nu-ink-2);
+}
+
+.nu .board-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.nu .board-row td {
+  transition: background 0.18s ease;
+}
+
+.nu .board-row:hover td {
+  background: #fafafc;
+}
+
+.nu .board-row:hover td:first-child {
+  border-radius: 14px 0 0 14px;
+}
+
+.nu .board-row:hover td:last-child {
+  border-radius: 0 14px 14px 0;
+}
+
+.nu .board-cell-number {
+  color: #9a99b2;
+}
+
+.nu .board-empty-row td {
+  padding: 44px 10px;
+  color: var(--nu-ink-3);
+}
+
+.nu .board-badge {
+  min-width: 0;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.nu .board-badge.is-open { background: var(--nu-accent); color: #ffffff; }
+.nu .board-badge.is-waiting { background: #fdf1dc; color: #8a4b08; }
+.nu .board-badge.is-closed { background: #eeeff3; color: #4a495f; }
+.nu .board-badge.is-notice { background: #e6e6fb; color: var(--nu-accent); }
+
+.nu .board-title-link {
+  color: var(--nu-ink);
+  font-weight: 800;
+}
+
+.nu .board-title-link:hover,
+.nu .board-title-link:focus-visible {
+  color: var(--nu-accent);
+  text-decoration: none;
+}
+
+.nu .board-mine-mark {
+  color: #0f766e;
+}
+
+.nu .board-due strong {
+  color: var(--nu-ink);
+}
+
+.nu .board-due-start {
+  color: #9a99b2;
+}
+
+/* 'ⓘ' 대신 '보기' 단추 */
+.nu .board-go-link {
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--nu-field);
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0;
+  color: var(--nu-ink);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.nu .board-go-link::before {
+  content: "보기";
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.nu .board-go-link:hover,
+.nu .board-go-link:focus-visible {
+  border-color: var(--nu-accent);
+  color: var(--nu-accent);
+}
+
+.nu .board-footnote {
+  margin: 0;
+  font-size: 13px;
+  text-align: center;
+  color: var(--nu-ink-3);
+}
+
+/* ---------- 과제 상세 ---------- */
+
+.nu .board-detail-head {
+  margin-top: 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--nu-line);
+}
+
+.nu .board-detail-head h1 {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.nu .board-detail-tag {
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  background: var(--nu-gray);
+  color: var(--nu-ink-3);
+  font-size: 12px;
+  font-weight: 800;
+  vertical-align: middle;
+}
+
+.nu .board-list-button {
+  min-height: 40px;
+  padding: 0 18px;
+  border: 1px solid var(--nu-field);
+  border-radius: 12px;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  color: var(--nu-ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.nu .board-list-button:hover,
+.nu .board-list-button:focus-visible {
+  border-color: #c9cadb;
+  background: #fafafc;
+}
+
+.nu .board-detail-actions {
+  margin: 16px 0;
+}
+
+.nu .board-period {
+  padding: 14px 18px;
+  border-radius: 18px;
+  background: var(--nu-lavender);
+}
+
+.nu .board-period p {
+  color: var(--nu-ink-2);
+}
+
+.nu .board-period p.board-period-right {
+  color: var(--nu-alert);
+  font-weight: 800;
+}
+
+.nu .board-info-table {
+  border-top: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid var(--nu-line);
+  border-radius: 18px;
+}
+
+.nu .board-info-table :is(th, td) {
+  border-bottom: 1px solid var(--nu-line);
+}
+
+.nu .board-info-table tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.nu .board-info-table th {
+  background: #fafafc;
+  color: var(--nu-ink-3);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.nu .board-info-table td {
+  color: var(--nu-ink);
+}
+
+.nu .board-notice-box {
+  margin-bottom: 4px;
+  border: 0;
+  border-radius: 18px;
+  background: #fafafc;
+}
+
+.nu .board-notice-box h2,
+.nu .board-subheading {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.nu .board-notice-text {
+  color: var(--nu-ink-2);
+}
+
+/* ---------- 글 상세 (공지 · 제출글) ---------- */
+
+.nu .board-post {
+  margin-top: 0;
+  padding: 32px 36px;
+}
+
+.nu .board-post-head {
+  border-bottom: 1px solid var(--nu-line);
+}
+
+.nu .board-post-kind {
+  color: var(--nu-ink-3);
+}
+
+.nu .board-post-head h1 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--nu-ink);
+}
+
+.nu .board-post-meta {
+  color: var(--nu-ink-3);
+}
+
+.nu .board-post-meta b {
+  color: var(--nu-ink-2);
+}
+
+.nu .board-post-body {
+  color: var(--nu-ink-2);
+  font-size: 16px;
+}
+
+.nu .board-post-actions {
+  border-top: 1px solid var(--nu-line);
+}
+
+.nu .board-attachments {
+  border: 0;
+  border-radius: 18px;
+  background: #fafafc;
+}
+
+.nu .board-attachment a {
+  color: var(--nu-accent);
+  font-weight: 700;
+}
+
+/* 댓글 */
+.nu .board-comments {
+  border-top: 1px solid var(--nu-line);
+}
+
+.nu .board-comments h2,
+.nu .activity-comments h2 {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.nu .activity-comment {
+  border: 0;
+  border-radius: 16px;
+  background: #fafafc;
+}
+
+.nu .activity-comment-head time {
+  color: #9a99b2;
+}
+
+:where(.nu) .activity-comment-delete {
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.nu .board-comment-form {
+  gap: 8px;
+}
+
+:where(.nu) .board-comment-form button {
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 14px;
+  background: var(--nu-accent);
+}
+
+.nu .activity-post-state {
+  margin-top: 12px;
+}
+
+/* ---------- 제출하기 ---------- */
+
+.nu .board-write {
+  padding: 32px 36px 28px;
+}
+
+.nu .board-write-row {
+  border-top: 1px solid var(--nu-line);
+}
+
+.nu .board-write-label {
+  color: var(--nu-ink-2);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.nu .board-write-identity input {
+  background: var(--nu-gray);
+  color: var(--nu-ink-3);
+}
+
+.nu .board-write-actions {
+  border-top: 1px solid var(--nu-line);
+}
+
+:where(.nu) .board-write-actions button {
+  min-height: 46px;
+  padding: 0 30px;
+  border-radius: 14px;
+  background: var(--nu-accent);
+  box-shadow: var(--nu-shadow-btn);
+}
+
+:where(.nu) .board-write-actions button:hover:not(:disabled) {
+  background: var(--nu-accent-hover);
+}
+
+.nu .board-attach-box {
+  min-height: 48px;
+  border: 1px solid var(--nu-field);
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.nu .board-attach-box:hover,
+.nu .board-attach-box.is-filled {
+  border-color: #c9cadb;
+  background: #fafafc;
+}
+
+.nu .board-attach-box:focus-within,
+.nu .board-attach-box.is-dragging {
+  border-color: var(--nu-accent);
+  background: var(--nu-lavender);
+  box-shadow: 0 0 0 4px rgba(43, 40, 112, 0.1);
+}
+
+.nu .board-attach-choose {
+  border: 1px solid var(--nu-field);
+  border-radius: 10px;
+  color: var(--nu-ink);
+}
+
+.nu .board-attach-box:hover .board-attach-choose {
+  border-color: var(--nu-accent);
+  color: var(--nu-accent);
+}
+
+:where(.nu) .board-attach-clear {
+  width: 30px;
+  min-height: 0;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--nu-field);
+  border-radius: 9px;
+  background: #ffffff;
+  color: var(--nu-ink-3);
+}
+
+:where(.nu) .board-attach-add {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 10px;
+  border: 1.5px dashed #c9cadb;
+  border-radius: 14px;
+  background: #ffffff;
+  color: var(--nu-ink-3);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+:where(.nu) .board-attach-add:hover:not(:disabled) {
+  border-color: var(--nu-accent);
+  background: var(--nu-lavender);
+  color: var(--nu-accent);
+}
+
+/* ---------- 행사 상세 (activity-post 구조) ---------- */
+
+.nu .activity-post {
+  padding: 32px 36px;
+  border: 1px solid var(--nu-line);
+}
+
+.nu .activity-post-head {
+  border-bottom: 1px solid var(--nu-line);
+}
+
+.nu .activity-post-head h1 {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.nu .activity-post-meta {
+  color: var(--nu-ink-3);
+}
+
+.nu a.activity-post-back {
+  border: 1px solid var(--nu-field);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--nu-ink);
+}
+
+.nu a.activity-post-back:hover {
+  border-color: #c9cadb;
+  background: #fafafc;
+}
+
+.nu .activity-post-content {
+  min-height: 0;
+  color: var(--nu-ink-2);
+}
+
+.nu .event-post-poster img {
+  border-radius: 22px;
+  box-shadow: var(--nu-shadow-card);
+}
+
+.nu .event-post-block {
+  border-top: 1px solid var(--nu-line);
+}
+
+/* 행사 상세는 아래 구역마다 윗줄이 있으니 머리 밑줄은 뺀다 */
+.nu .event-post .activity-post-head {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.nu .event-post-club:empty {
+  display: none;
+}
+
+.nu .event-post-block h2 {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.nu .activity-post .activity-comments {
+  padding: 22px 0 0;
+  border: 0;
+  border-top: 1px solid var(--nu-line);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+/* ---------- 모바일 ---------- */
+
+@media (max-width: 860px) {
+  /* 모바일은 바깥 카드를 걷어내고 줄마다 카드로 */
+  .nu .board-card {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .nu .board-tabs {
+    width: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  :where(.nu) .board-tab {
+    padding: 0 8px;
+  }
+
+  .nu .board-toolbar {
+    padding: 12px 0;
+  }
+
+  .nu .board-filters {
+    flex: 1;
+  }
+
+  .nu .board-filters :is(select, input[type="search"]) {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .nu :is(.board-post, .board-write, .activity-post) {
+    padding: 22px 18px;
+  }
+
+  .nu :is(.board-post-head, .activity-post-head) h1,
+  .nu .board-detail-head h1 {
+    font-size: 22px;
+  }
+
+  .nu .board-info-table th {
+    width: 96px;
+  }
+
+  .nu .board-write-row {
+    align-items: stretch;
+  }
+
+  .nu .board-period {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* 표 → 카드 (legacy.css 와 같은 760px 에서 바뀐다) */
+@media (max-width: 760px) {
+  .nu .board-table tr.board-row {
+    margin-bottom: 10px;
+    padding: 16px 18px;
+    border: 1px solid var(--nu-line);
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(22, 21, 43, 0.04), 0 12px 24px -20px rgba(22, 21, 43, 0.35);
+  }
+
+  .nu .board-table tbody tr {
+    height: auto;
+  }
+
+  .nu .board-table tr.board-row td {
+    padding: 3px 0;
+    border: 0;
+    color: var(--nu-ink);
+  }
+
+  .nu .board-table tr.board-row td::before {
+    color: var(--nu-ink-3);
+    font-size: 13px;
+  }
+
+  .nu .board-table tr.board-row .board-cell-status {
+    order: -2;
+    justify-content: flex-start;
+  }
+
+  .nu .board-table tr.board-row .board-cell-status::before {
+    display: none;
+  }
+
+  .nu .board-table tr.board-row .board-cell-title {
+    padding: 6px 0 10px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--nu-line);
+    font-size: 17px;
+  }
+
+  .nu .board-row:hover td {
+    background: none;
+  }
+
+  .nu .board-empty-row td {
+    border-radius: 20px;
+    border: 1.5px dashed var(--nu-field);
+  }
+}
+
+/* ---------- 과제 첨부 칸 (등록 · 수정 창) ---------- */
+
+.nu .assignment-attach {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nu .assignment-attach-title {
+  margin: 0;
+  color: var(--nu-ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.nu .assignment-attach-title small {
+  margin-left: 6px;
+  color: var(--nu-ink-3);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.nu .assignment-attach .board-attach-add {
+  margin-top: 0;
+}
+
+/* 정렬 선택은 다른 거르기 칸과 같은 모양이다. */
+.nu .board-filters select[id$="SortSelect"] {
+  min-width: 112px;
+}

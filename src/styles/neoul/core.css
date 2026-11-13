@@ -1,0 +1,600 @@
+/* ==========================================================
+   너울 디자인 (E안)
+   body 에 class="nu" 가 붙은 페이지에만 적용된다.
+   값은 캔버스의 'E · 디자인 기준'과 같다.
+   ========================================================== */
+
+.nu {
+  --nu-accent: #2b2870;
+  --nu-accent-hover: #221f5c;
+  --nu-ink: #16152b;
+  --nu-ink-2: #3e3d5c;
+  --nu-ink-3: #555470;
+  --nu-lilac: #dedffb;
+  --nu-lavender: #f5f4fb;
+  --nu-gray: #f1f2f6;
+  --nu-line: #ecedf3;
+  --nu-field: #dfe0ea;
+  --nu-alert: #c2410c;
+
+  --nu-r-head: 32px;
+  --nu-r-card: 28px;
+  --nu-r-field: 14px;
+
+  --nu-shadow-card: 0 1px 2px rgba(22, 21, 43, 0.05), 0 18px 36px -22px rgba(22, 21, 43, 0.3);
+  --nu-shadow-card-hover: 0 2px 4px rgba(22, 21, 43, 0.06), 0 28px 48px -24px rgba(22, 21, 43, 0.38);
+  --nu-shadow-head: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 1px 2px rgba(22, 21, 43, 0.05), 0 20px 44px -24px rgba(43, 40, 112, 0.32);
+  --nu-shadow-metal: inset 0 1px 0 rgba(255, 255, 255, 0.38), inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(23, 22, 63, 0.18), 0 30px 60px -26px rgba(23, 22, 63, 0.72);
+  --nu-shadow-btn: 0 10px 20px -12px rgba(43, 40, 112, 0.6);
+  --nu-metal: linear-gradient(128deg, #17163f 0%, #2f2c7e 24%, #211f5a 42%, #4a47a4 60%, #2a2770 78%, #1a1948 100%);
+
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Noto Sans KR", system-ui, -apple-system, sans-serif;
+  color: var(--nu-ink);
+  background:
+    url("/bg/grain.png") repeat,
+    url("/bg/lines.png") center top / 100% auto no-repeat,
+    #fafafc;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* :where() 로 감싸 우선순위를 낮춘다. 타일마다 정한 글자색이 이기도록. */
+:where(.nu) a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:where(.nu) :is(h1, h2, h3) {
+  margin: 0;
+}
+
+.nu :focus-visible {
+  outline: 3px solid rgba(43, 40, 112, 0.35);
+  outline-offset: 2px;
+}
+
+.nu .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+html:has(body.nu) {
+  scroll-behavior: smooth;
+}
+
+/* ---------- 공통 틀 ---------- */
+
+.nu main.nu-wrap {
+  width: auto;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px 56px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nu-card {
+  background: #ffffff;
+  border: 1px solid var(--nu-line);
+  border-radius: var(--nu-r-card);
+  box-shadow: var(--nu-shadow-card);
+}
+
+.nu-eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #4b4880;
+}
+
+.nu-callout {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: var(--nu-r-field);
+  background: #fdf1dc;
+  color: #6b3a06;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* 상태 칩 */
+.nu-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+  background: #eeeff3;
+  color: #4a495f;
+}
+
+.nu-chip.is-pending { background: #fdf1dc; color: #8a4b08; }
+.nu-chip.is-approved { background: #dff3ef; color: #0f5f57; }
+.nu-chip.is-partial { background: #e6e6fb; color: #2b2870; }
+.nu-chip.is-rejected { background: #ffede3; color: #9a3412; }
+.nu-chip.is-assembly { background: #e6e6fb; color: #2b2870; }
+.nu-chip.is-confirmed { background: #fff4d6; color: #7a4d00; }
+.nu-chip.is-completed,
+.nu-chip.is-done { background: #eeeff3; color: #4a495f; }
+
+/* 숫자 배지 */
+.nu-badge {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  box-sizing: border-box;
+  border-radius: 9px;
+  border: 2px solid #ffffff;
+  background: var(--nu-alert);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 14px;
+  text-align: center;
+  animation: nu-badge-pop 0.35s var(--nu-spring) both;
+}
+
+.nu-badge[hidden] {
+  display: none;
+}
+
+/* 버튼 */
+.nu .nu-btn,
+.nu button.nu-btn {
+  min-height: 48px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: var(--nu-r-field);
+  background: var(--nu-accent);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  box-shadow: var(--nu-shadow-btn);
+  cursor: pointer;
+}
+
+.nu .nu-btn:hover:not(:disabled) {
+  background: var(--nu-accent-hover);
+  box-shadow: 0 14px 26px -14px rgba(43, 40, 112, 0.7);
+}
+
+.nu .nu-btn.is-soft,
+.nu button.secondary {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--nu-field);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--nu-ink);
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.nu .nu-btn.is-soft:hover:not(:disabled),
+.nu button.secondary:hover:not(:disabled) {
+  border-color: #c9cadb;
+  background: #fafafc;
+}
+
+/* 입력칸 */
+.nu label {
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nu-ink-2);
+}
+
+.nu :is(input:not([type="checkbox"], [type="radio"], [type="file"]), select, textarea) {
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--nu-field);
+  border-radius: var(--nu-r-field);
+  background: #ffffff;
+  color: var(--nu-ink);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  box-sizing: border-box;
+}
+
+.nu textarea {
+  padding: 12px 14px;
+}
+
+.nu input:focus,
+.nu select:focus,
+.nu textarea:focus {
+  border-color: var(--nu-accent);
+  box-shadow: 0 0 0 4px rgba(43, 40, 112, 0.14);
+}
+
+.nu input::placeholder,
+.nu textarea::placeholder {
+  color: #9493ab;
+}
+
+/* ---------- 위 메뉴 줄 (PC) ---------- */
+
+.nu-topnav {
+  view-transition-name: nu-topnav;
+}
+
+.nu-topnav-inner {
+  max-width: 1200px;
+  height: 76px;
+  margin: 0 auto;
+  padding: 0 32px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nu-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.nu-brand img {
+  width: 34px;
+}
+
+.nu-navlinks {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.nu-navlinks a {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nu-ink-2);
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.25s var(--nu-ease);
+}
+
+.nu-navlinks a:hover {
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--nu-ink);
+}
+
+.nu-navlinks a[aria-current="page"] {
+  background: #ffffff;
+  color: var(--nu-accent);
+  font-weight: 800;
+  box-shadow: 0 1px 2px rgba(22, 21, 43, 0.06), 0 8px 18px -12px rgba(22, 21, 43, 0.35);
+}
+
+.nu-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.nu-iconbtn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nu-ink);
+  box-shadow: 0 1px 2px rgba(22, 21, 43, 0.08), 0 8px 18px -10px rgba(22, 21, 43, 0.3);
+  transition: transform 0.2s var(--nu-ease), box-shadow 0.25s var(--nu-ease);
+}
+
+.nu-iconbtn:hover {
+  transform: translateY(-1px);
+}
+
+.nu-iconbtn .nu-badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+
+.nu .nu-profile-pill {
+  min-height: 44px;
+  height: 44px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 22px;
+  background: #ffffff;
+  color: var(--nu-ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 1px 2px rgba(22, 21, 43, 0.08), 0 8px 18px -10px rgba(22, 21, 43, 0.3);
+  cursor: pointer;
+}
+
+.nu .nu-profile-pill:hover {
+  box-shadow: 0 2px 4px rgba(22, 21, 43, 0.1), 0 12px 22px -12px rgba(22, 21, 43, 0.38);
+}
+
+.nu-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  background: var(--nu-accent);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nu-profile-name {
+  padding-right: 10px;
+  white-space: nowrap;
+}
+
+.nu-profile-name:empty {
+  display: none;
+}
+
+.nu-profile-role {
+  font-weight: 500;
+  color: var(--nu-ink-3);
+}
+
+/* ---------- 아래 메뉴 (모바일) ---------- */
+
+.nu-tabbar {
+  display: none;
+  view-transition-name: nu-tabbar;
+}
+
+.nu-tab {
+  position: relative;
+  min-height: 52px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--nu-ink-3);
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.nu .nu-tab:hover {
+  background: transparent;
+}
+
+.nu-tab[aria-current="page"] {
+  color: var(--nu-accent);
+  font-weight: 800;
+}
+
+.nu-tab-icon {
+  position: relative;
+  display: flex;
+  transition: transform 0.25s var(--nu-spring);
+}
+
+.nu-tab:active .nu-tab-icon {
+  transform: scale(0.86);
+}
+
+.nu-tab .nu-badge {
+  position: absolute;
+  top: -6px;
+  right: -12px;
+}
+
+/* ---------- 각 페이지 머리 ---------- */
+
+.nu-pagehead {
+  view-transition-name: nu-head;
+  position: relative;
+  overflow: hidden;
+  padding: 34px 44px 38px;
+  border-radius: var(--nu-r-head);
+  background: var(--nu-lavender);
+  box-shadow: var(--nu-shadow-head);
+}
+
+.nu-pagehead > *:not(img) {
+  position: relative;
+  z-index: 1;
+}
+
+.nu-pagehead-wave {
+  position: absolute;
+  top: -30px;
+  right: -20px;
+  width: 300px;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.nu-back {
+  display: none;
+}
+
+.nu-crumb {
+  margin: 0;
+  font-size: 13px;
+  color: var(--nu-ink-3);
+}
+
+.nu-crumb a:hover {
+  color: var(--nu-accent);
+}
+
+.nu-pagehead h1 {
+  margin-top: 10px;
+  font-size: 40px;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  color: var(--nu-accent);
+}
+
+.nu-pagehead p.nu-pagehead-desc {
+  margin: 8px 0 0;
+  font-size: 16px;
+  color: #55527a;
+}
+
+/* ---------- 프로필 팝업 (기존 위젯을 E안에 맞춤) ---------- */
+
+.nu .profile-button {
+  display: none;
+}
+
+.nu .profile-widget {
+  top: 84px;
+  right: max(24px, calc((100vw - 1200px) / 2 + 32px));
+  bottom: auto;
+}
+
+.nu .profile-panel {
+  border: 1px solid var(--nu-line);
+  border-radius: 24px;
+  box-shadow: 0 2px 4px rgba(22, 21, 43, 0.06), 0 30px 60px -24px rgba(22, 21, 43, 0.45);
+  transform-origin: top right;
+  animation: nu-pop-in 0.28s var(--nu-ease) both;
+}
+
+.nu .profile-panel.is-closing {
+  animation: nu-pop-out 0.16s var(--nu-ease-in) both;
+}
+
+@keyframes nu-pop-out {
+  to {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+}
+
+.nu.nu-home .profile-widget {
+  top: 96px;
+}
+
+/* ==========================================================
+   모바일 (860px 이하)
+   ========================================================== */
+
+@media (max-width: 860px) {
+  .nu {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+    background: #ffffff;
+  }
+
+  .nu-topnav {
+    display: none;
+  }
+
+  .nu-tabbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+    border-top: 1px solid #e6e7ee;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .nu .profile-widget {
+    top: auto;
+    right: 16px;
+    bottom: calc(84px + env(safe-area-inset-bottom));
+  }
+
+  .nu .profile-panel {
+    transform-origin: bottom right;
+  }
+
+  .nu main.nu-wrap {
+    padding: 0 20px 24px;
+    gap: 14px;
+  }
+
+  /* 페이지 머리: 화면 끝까지 붙이고 아래만 둥글게 */
+  .nu-pagehead {
+    margin: 0 -20px;
+    padding: 16px 20px 24px;
+    border-radius: 0 0 28px 28px;
+    box-shadow: none;
+  }
+
+  .nu-pagehead-wave {
+    top: -6px;
+    right: -48px;
+    width: 180px;
+    opacity: 0.5;
+  }
+
+  .nu-back {
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 2px rgba(22, 21, 43, 0.08);
+  }
+
+  .nu-crumb {
+    display: none;
+  }
+
+  .nu-pagehead h1 {
+    margin-top: 18px;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+  }
+
+  .nu-pagehead p.nu-pagehead-desc {
+    margin-top: 6px;
+    max-width: 270px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .nu-card {
+    border-radius: 22px;
+  }
+}

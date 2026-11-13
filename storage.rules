@@ -1,0 +1,85 @@
+rules_version = '2';
+
+// 동아리 과제에 관련된 첨부파일만 여기에 담긴다.
+//  - 제출글 첨부   : assignments/{과제 번호}/{올린 계정}/{묶음 번호}/{파일 이름}
+//  - 과제 안내 첨부: assignmentFiles/{과제 번호}/{올린 계정}/{묶음 번호}/{파일 이름}
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // firestore.rules 의 isAdmin() 과 같은 목록이어야 한다. 한쪽을 고치면 다른 쪽도 고칠 것.
+    function isAdmin() {
+      return isSignedIn()
+        && request.auth.token.email in [
+          'a33272708@gmail.com',
+          'khhsexploithub@gmail.com',
+          '111@111.com'
+        ];
+    }
+
+    // 과제 문서를 Firestore 에서 읽어 작성자를 확인한다.
+    function assignmentPath(assignmentId) {
+      return /databases/(default)/documents/clubAssignments/$(assignmentId);
+    }
+
+    function assignmentExists(assignmentId) {
+      return firestore.exists(assignmentPath(assignmentId));
+    }
+
+    function isAssignmentAuthor(assignmentId) {
+      return isSignedIn()
+        && assignmentExists(assignmentId)
+        && firestore.get(assignmentPath(assignmentId)).data.get('authorUid', '') == request.auth.uid;
+    }
+
+    // 과제를 새로 열 수 있는 계정: 부장 (관리자는 따로 통과한다)
+    function isClubLeader() {
+      return isSignedIn()
+        && firestore.exists(/databases/(default)/documents/users/$(request.auth.uid))
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid))
+          .data.get('clubLeaderOf', '') != '';
+    }
+
+    match /assignments/{assignmentId}/{userId}/{uploadId}/{fileName} {
+      // 제출글을 볼 수 있는 계정(로그인한 구성원)이면 첨부도 받을 수 있다.
+      allow read: if isSignedIn();
+
+      // 올리는 것은 본인 폴더에만. 한 파일 30MB 까지.
+      allow create: if isSignedIn()
+        && request.auth.uid == userId
+        && request.resource.size <= 30 * 1024 * 1024;
+
+      // 올린 본인만 지운다. (덮어쓰기는 막는다)
+      allow delete: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    // 과제 안내에 붙는 첨부파일.
+    match /assignmentFiles/{assignmentId}/{userId}/{uploadId}/{fileName} {
+      allow read: if isSignedIn();
+
+      // 한 파일 30MB 까지, 본인 폴더에만.
+      //  - 이미 있는 과제: 작성자와 관리자만 첨부를 추가할 수 있다.
+      //  - 아직 없는 과제(등록하면서 올리는 파일): 부장과 관리자만.
+      // 한 과제에 10개까지라는 제한은 과제 문서(firestore.rules)에서 검증한다.
+      allow create: if isSignedIn()
+        && request.auth.uid == userId
+        && request.resource.size <= 30 * 1024 * 1024
+        && (isAdmin()
+          || (assignmentExists(assignmentId)
+            ? isAssignmentAuthor(assignmentId)
+            : isClubLeader()));
+
+      // 올린 본인, 과제 작성자, 관리자가 지운다. (덮어쓰기는 막는다)
+      allow delete: if isSignedIn()
+        && (request.auth.uid == userId || isAdmin() || isAssignmentAuthor(assignmentId));
+    }
+
+    // 그 밖의 경로는 모두 막는다.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

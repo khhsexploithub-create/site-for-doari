@@ -1,0 +1,308 @@
+/* 연합회 행사 — 다가오는 행사는 포스터 카드, 지난 행사는 한 줄 목록 */
+
+.nu .union-events-page {
+  gap: 16px;
+}
+
+.nu .union-events-section {
+  margin: 0;
+}
+
+.nu .union-events-section .resources-section-heading {
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ---------- 다가오는 행사 (카드) ---------- */
+
+.nu #upcomingEventList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* 가장 가까운 행사는 두 칸 · 가로 배치 */
+.nu #upcomingEventList > li:first-child:not(.union-event-empty) {
+  grid-column: span 2;
+}
+
+:where(.nu) .union-event-item {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  border: 1px solid var(--nu-line);
+  border-radius: 24px;
+  background: #ffffff;
+  color: var(--nu-ink);
+  font-weight: 400;
+  text-align: left;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  box-shadow: none;
+  transition: transform 0.25s var(--nu-ease), box-shadow 0.25s ease;
+}
+
+:where(.nu) .union-event-item:hover:not(:disabled) {
+  background: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: var(--nu-shadow-card-hover);
+}
+
+.nu .union-event-visual {
+  position: relative;
+  overflow: hidden;
+  height: 170px;
+  flex: none;
+  background: linear-gradient(135deg, #e9e8fc, var(--nu-lilac));
+}
+
+/* 포스터가 없을 때 비치는 옅은 너울 */
+.nu .union-event-visual::before {
+  content: "";
+  position: absolute;
+  top: -24px;
+  right: -36px;
+  width: 190px;
+  height: 190px;
+  background: url("/neoul-wave.png") center / contain no-repeat;
+  opacity: 0.3;
+  transition: transform 0.4s var(--nu-ease);
+}
+
+.nu .union-event-item:hover .union-event-visual::before {
+  transform: translate(-4px, 4px) rotate(-3deg);
+}
+
+.nu .union-event-thumb {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  object-fit: cover;
+  display: block;
+}
+
+.nu .union-event-date {
+  z-index: 2;
+}
+
+.nu .union-event-date {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  min-width: 54px;
+  padding: 6px 8px 4px;
+  border-radius: 16px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+  box-shadow: 0 8px 18px -10px rgba(22, 21, 43, 0.5);
+}
+
+.nu .union-event-date small {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--nu-alert);
+}
+
+.nu .union-event-date b {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--nu-ink);
+}
+
+.nu .union-event-body {
+  padding: 18px 20px 20px;
+  gap: 6px;
+}
+
+.nu .union-event-body strong {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--nu-ink);
+}
+
+.nu .union-event-meta,
+.nu .union-event-target {
+  color: var(--nu-ink-3);
+}
+
+/* 가장 가까운 행사: 포스터 | 내용 */
+.nu #upcomingEventList > li:first-child .union-event-item {
+  flex-direction: row;
+}
+
+.nu #upcomingEventList > li:first-child .union-event-visual {
+  width: 46%;
+  height: auto;
+  min-height: 260px;
+}
+
+.nu #upcomingEventList > li:first-child .union-event-body {
+  flex: 1;
+  padding: 28px 30px;
+  justify-content: center;
+}
+
+.nu #upcomingEventList > li:first-child .union-event-body::before {
+  content: "가장 가까운 행사";
+  width: fit-content;
+  margin-bottom: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #ffede3;
+  color: #9a3412;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.nu #upcomingEventList > li:first-child .union-event-body strong {
+  font-size: 26px;
+  letter-spacing: -0.02em;
+}
+
+.nu #upcomingEventList > li:first-child .union-event-date {
+  background: var(--nu-ink);
+}
+
+.nu #upcomingEventList > li:first-child .union-event-date b {
+  color: #ffffff;
+}
+
+/* ---------- 지난 행사 (한 줄 목록) ---------- */
+
+.nu #pastEventList {
+  gap: 0;
+}
+
+:where(.nu) #pastEventList .union-event-item {
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 4px;
+  border: 0;
+  border-bottom: 1px solid var(--nu-line);
+  border-radius: 0;
+  opacity: 1;
+}
+
+.nu #pastEventList > li:last-child .union-event-item {
+  border-bottom: 0;
+}
+
+:where(.nu) #pastEventList .union-event-item:hover:not(:disabled) {
+  transform: none;
+  box-shadow: none;
+  background: #fafafc;
+}
+
+.nu #pastEventList .union-event-visual {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--nu-gray);
+}
+
+.nu #pastEventList .union-event-thumb,
+.nu #pastEventList .union-event-visual::before {
+  display: none;
+}
+
+.nu #pastEventList .union-event-date {
+  position: static;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  justify-content: center;
+  background: none;
+  box-shadow: none;
+}
+
+.nu #pastEventList .union-event-date small {
+  color: var(--nu-ink-3);
+}
+
+.nu #pastEventList .union-event-date b {
+  font-size: 18px;
+  color: var(--nu-ink-2);
+}
+
+.nu #pastEventList .union-event-body {
+  padding: 0;
+  flex: 1;
+  gap: 2px;
+}
+
+.nu #pastEventList .union-event-body strong {
+  font-size: 15px;
+}
+
+.nu #pastEventList .union-event-target {
+  display: none;
+}
+
+.nu .union-event-empty {
+  grid-column: 1 / -1;
+  padding: 26px 12px;
+  border: 1.5px dashed var(--nu-field);
+  border-radius: 18px;
+  color: var(--nu-ink-3);
+}
+
+/* ---------- 상세 창 ---------- */
+
+.nu .union-event-detail-poster {
+  max-height: 300px;
+  border-radius: 18px;
+  background: var(--nu-gray);
+}
+
+.nu .union-event-dialog .admin-card-actions {
+  margin-top: 16px;
+  justify-content: flex-end;
+}
+
+/* ---------- 모바일 ---------- */
+
+@media (max-width: 860px) {
+  .nu #upcomingEventList {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nu #upcomingEventList > li:first-child:not(.union-event-empty) {
+    grid-column: auto;
+  }
+
+  .nu #upcomingEventList > li:first-child .union-event-item {
+    flex-direction: column;
+  }
+
+  .nu #upcomingEventList > li:first-child .union-event-visual {
+    width: auto;
+    min-height: 0;
+    height: 180px;
+  }
+
+  .nu #upcomingEventList > li:first-child .union-event-body {
+    padding: 18px 20px 20px;
+  }
+
+  .nu #upcomingEventList > li:first-child .union-event-body strong {
+    font-size: 21px;
+  }
+
+  .nu .union-event-visual {
+    height: 140px;
+  }
+}

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>자원 예약 | 동아리 통합 인프라</title>
+  <script>addEventListener("pagereveal", function (e) { if (e.viewTransition) document.documentElement.classList.add("nu-vt"); });</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+  <link rel="icon" href="/neoul-logo.png">
+  <link rel="stylesheet" href="/src/styles/site.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f4fb">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="너울">
+  <script type="module" src="/src/pwa.js"></script>
+</head>
+
+<body class="nu">
+  <main class="nu-wrap feature-page nu-enter">
+    <header class="nu-pagehead">
+      <img class="nu-pagehead-wave" src="/neoul-wave.png" alt="" aria-hidden="true">
+      <a href="/" class="nu-back" aria-label="홈으로">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </a>
+      <p class="nu-crumb"><a href="/">홈</a> › 자원 예약</p>
+      <h1>자원 예약</h1>
+      <p class="nu-pagehead-desc">동아리 활동에 필요한 공간, 장비, 물품을 확인하고 예약하세요.</p>
+    </header>
+
+    <section class="feature-content resources-page">
+      <section class="resources-section" aria-labelledby="resourceListHeading">
+        <div class="resources-section-heading">
+          <h2 id="resourceListHeading">자원 목록</h2>
+          <p>층을 선택한 뒤 평면도 안의 공간을 누르면 예약 신청서에 바로 반영됩니다.</p>
+          <p class="resource-layout-note">
+            첨부된 교실 배치도 기준 · <strong>회색으로 표시된 칸은 예약을 받지 않는 공간입니다.</strong>
+          </p>
+        </div>
+
+        <p id="spaceReservationNotice" class="space-reservation-notice" role="note"></p>
+
+        <div class="resource-tabs" role="tablist" aria-label="자원 카테고리">
+          <button type="button" class="resource-tab is-active" role="tab" aria-selected="true" data-category="공간">공간</button>
+          <button type="button" class="resource-tab" role="tab" aria-selected="false" data-category="장비">장비</button>
+          <button type="button" class="resource-tab" role="tab" aria-selected="false" data-category="물품">물품</button>
+        </div>
+        <section id="spaceMap" class="school-map" aria-labelledby="floorPlanTitle">
+          <div class="floor-tabs" role="tablist" aria-label="층 선택">
+            <button type="button" class="floor-tab is-active" role="tab" aria-selected="true" data-floor="5층">5층</button>
+            <button type="button" class="floor-tab" role="tab" aria-selected="false" data-floor="4층">4층</button>
+            <button type="button" class="floor-tab" role="tab" aria-selected="false" data-floor="3층">3층</button>
+            <button type="button" class="floor-tab" role="tab" aria-selected="false" data-floor="2층">2층</button>
+            <button type="button" class="floor-tab" role="tab" aria-selected="false" data-floor="1층">1층</button>
+          </div>
+
+          <div class="floor-plan-shell">
+            <div class="floor-plan-heading">
+              <div>
+                <span id="floorPlanEyebrow" class="floor-plan-eyebrow">SPACE MAP</span>
+                <h3 id="floorPlanTitle">5층 평면도</h3>
+              </div>
+              <p id="floorPlanSelection" aria-live="polite"></p>
+            </div>
+            <div id="floorPlan" class="floor-plan" role="group" aria-label="5층 공간 선택"></div>
+            <p id="floorPlanNote" class="floor-plan-note" hidden></p>
+          </div>
+
+          <div class="floor-plan-legend" aria-label="평면도 범례">
+            <span><i class="legend-swatch is-available"></i>예약 가능</span>
+            <span><i class="legend-swatch is-selected"></i>선택됨</span>
+            <span><i class="legend-swatch is-unavailable"></i>예약 불가</span>
+            <span><i class="legend-swatch is-facility"></i>기타 시설</span>
+            <span><i class="legend-swatch is-empty"></i>없는 공간</span>
+          </div>
+        </section>
+
+        <ul id="resourceList" class="resource-list" aria-live="polite" hidden></ul>
+      </section>
+
+      <section class="resources-section" aria-labelledby="reservationFormHeading">
+        <div class="resources-section-heading">
+          <h2 id="reservationFormHeading">예약 신청</h2>
+          <p>동일한 자원과 날짜에 시간이 겹치는 예약은 신청할 수 없습니다.</p>
+        </div>
+
+        <form id="reservationForm" class="reservation-form">
+          <p id="reservationAuthMessage" class="message reservation-message" role="status" aria-live="polite"></p>
+          <label for="reservationClubName">
+            동아리 이름
+            <input id="reservationClubName" name="clubName" type="text" placeholder="예: 밴드부" required>
+          </label>
+          <label for="reservationRequesterName">
+            신청자명
+            <input id="reservationRequesterName" name="requesterName" type="text" placeholder="예: 홍길동" required>
+          </label>
+          <label for="reservationResource">
+            자원 선택
+            <select id="reservationResource" name="resource" required></select>
+          </label>
+
+          <p id="reservationTrainingNotice" class="reservation-training-notice" role="status" aria-live="polite" hidden></p>
+          <div class="reservation-time-fields">
+            <label for="reservationDate">
+              날짜
+              <input id="reservationDate" name="date" type="date" required>
+            </label>
+            <label for="reservationStartTime">
+              시작 시간
+              <input id="reservationStartTime" name="startTime" type="time" required>
+            </label>
+            <label for="reservationEndTime">
+              종료 시간
+              <input id="reservationEndTime" name="endTime" type="time" required>
+            </label>
+          </div>
+          <label for="reservationPurpose">
+            사용 목적
+            <textarea id="reservationPurpose" name="purpose" placeholder="예: 정기 연습" required></textarea>
+          </label>
+          <button id="reservationSubmitButton" type="submit">예약 신청</button>
+          <p id="reservationFormMessage" class="message reservation-message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="resources-section" aria-labelledby="reservationListHeading">
+        <div class="resources-section-heading">
+          <h2 id="reservationListHeading">예약 내역</h2>
+          <p>관리자가 승인한 예약만 표시됩니다.</p>
+        </div>
+
+        <div class="activity-search reservation-search">
+          <label for="reservationCategoryFilter">
+            카테고리
+            <select id="reservationCategoryFilter" name="categoryFilter">
+              <option value="">전체</option>
+              <option value="공간">공간</option>
+              <option value="장비">장비</option>
+              <option value="물품">물품</option>
+            </select>
+          </label>
+          <label for="reservationSearchInput">
+            자원명 검색
+            <input id="reservationSearchInput" name="search" type="search" placeholder="자원명을 입력하세요">
+          </label>
+        </div>
+        <ul id="reservationList" class="reservation-list" aria-live="polite"></ul>
+      </section>
+
+      <section class="resources-section my-reservations-section" aria-labelledby="myReservationListHeading">
+        <div class="resources-section-heading">
+          <h2 id="myReservationListHeading">내 예약</h2>
+          <p>승인 전 예약은 취소할 수 있습니다.</p>
+        </div>
+        <ul id="myReservationList" class="reservation-list" aria-live="polite"></ul>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="/src/resources/resources.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "/firebase-messaging-sw.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      },
+      {
+        "source": "/manifest.webmanifest",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      },
+      {
+        "source": "/.well-known/assetlinks.json",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/activity/assignment/**",
+        "destination": "/assignment-detail.html"
+      },
+      {
+        "source": "/activity/submission/**",
+        "destination": "/submission-detail.html"
+      },
+      {
+        "source": "/activity/submit/**",
+        "destination": "/submission-form.html"
+      },
+      {
+        "source": "/activity/**",
+        "destination": "/activity-detail.html"
+      },
+      {
+        "source": "/event/**",
+        "destination": "/event-detail.html"
+      }
+    ]
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "*.local"
+      ]
+    }
+  ]
+}

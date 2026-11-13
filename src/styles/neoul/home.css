@@ -1,0 +1,812 @@
+/* 홈 화면 (index.html) */
+
+/* ==========================================================
+   홈
+   ========================================================== */
+
+.home-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 32px 40px;
+  box-sizing: border-box;
+}
+
+.nu main.home-layout {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: 380px 240px 180px;
+  gap: 16px;
+}
+
+.home-hero { grid-column: 1 / span 2; grid-row: 1; }
+.home-alerts { grid-column: 3; grid-row: 1; }
+.tile-budget { grid-column: 1 / span 2; grid-row: 2; }
+.tile-cal { grid-column: 3; grid-row: 2; }
+.tile-act { grid-column: 1; grid-row: 3; }
+.tile-res { grid-column: 2; grid-row: 3; }
+.tile-evt { grid-column: 3; grid-row: 3; }
+
+.home-hero {
+  view-transition-name: nu-head;
+  position: relative;
+  overflow: hidden;
+  padding: 28px 28px 52px 52px;
+  box-sizing: border-box;
+  border-radius: var(--nu-r-head);
+  background: var(--nu-lavender);
+  box-shadow: var(--nu-shadow-head);
+  display: flex;
+  flex-direction: column;
+}
+
+.home-hero > *:not(.home-wave) {
+  position: relative;
+  z-index: 2;
+}
+
+.home-wave,
+.tile-budget-ghost {
+  position: absolute;
+  top: 110px;
+  right: -40px;
+  width: 520px;
+  z-index: 1;
+  pointer-events: none;
+  animation: nu-float 9s ease-in-out infinite;
+}
+
+.tile-budget-ghost {
+  top: -286px;
+  opacity: 0.4;
+  mix-blend-mode: screen;
+}
+
+.home-hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.home-title {
+  margin-top: 44px;
+  font-size: 88px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  color: var(--nu-accent);
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.7), 0 12px 28px rgba(43, 40, 112, 0.22);
+}
+
+.home-sub {
+  margin: 14px 0 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2e2b55;
+}
+
+.home-desc {
+  margin: 6px 0 0;
+  max-width: 250px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #55527a;
+}
+
+.home-greeting {
+  display: none;
+}
+
+/* 새 알림 */
+.home-alerts {
+  padding: 26px 26px 14px;
+  box-sizing: border-box;
+  border-radius: var(--nu-r-head);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.home-alerts-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.home-alerts-head h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.home-alerts-head .nu-badge {
+  min-width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 24px;
+}
+
+.home-alerts-more {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nu-ink-2);
+  transition: color 0.2s ease, transform 0.2s var(--nu-ease);
+}
+
+.home-alerts-more:hover {
+  color: var(--nu-accent);
+  transform: translateX(2px);
+}
+
+.home-feed {
+  margin: 4px -10px 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.home-feed > li {
+  animation: nu-rise 0.45s var(--nu-ease) both;
+}
+
+.home-feed > li:nth-child(2) { animation-delay: 0.06s; }
+.home-feed > li:nth-child(3) { animation-delay: 0.12s; }
+
+.home-feed a {
+  position: relative;
+  padding: 13px 10px 13px 24px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.home-feed li + li a::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10px;
+  right: 10px;
+  border-top: 1px solid var(--nu-line);
+}
+
+.home-feed a:hover {
+  background: #f7f7fb;
+}
+
+.home-feed-dot {
+  position: absolute;
+  top: 19px;
+  left: 10px;
+  width: 7px;
+  height: 7px;
+  border-radius: 4px;
+  background: var(--nu-alert);
+}
+
+.home-feed-tag {
+  align-self: flex-start;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  background: #eeeff3;
+  color: #4a495f;
+}
+
+.home-feed-tag.is-urgent { background: #ffede3; color: #9a3412; }
+.home-feed-tag.is-event { background: #e6e6fb; color: #2b2870; }
+.home-feed-tag.is-result { background: #dff3ef; color: #0f5f57; }
+
+.home-feed-title {
+  font-size: 15px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-feed-meta {
+  font-size: 12px;
+  color: var(--nu-ink-3);
+}
+
+/* 홈 화면 푸시 알림 켜기 (PC: 새 알림 카드 아래쪽) */
+.home-alerts .home-feed {
+  flex: 1;
+  min-height: 0;
+}
+
+.home-push {
+  margin: 6px -12px 0;
+  padding: 10px 10px 10px 12px;
+  border-radius: 18px;
+  background: var(--nu-lavender);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  animation: nu-rise 0.4s var(--nu-ease) both;
+  transition: background 0.3s ease;
+}
+
+.home-push-icon {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 12px;
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  color: var(--nu-accent);
+}
+
+.home-push-text {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--nu-ink-2);
+}
+
+:where(.nu) .home-push button {
+  min-height: 36px;
+  padding: 0 14px;
+  flex: none;
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+.home-push.is-on {
+  background: #eaf6f3;
+}
+
+.home-push.is-on .home-push-icon {
+  color: #0f766e;
+}
+
+/* 알림이 꺼져 있으면 종이 살짝 흔들려 눈에 띄게 */
+.home-push:not(.is-on):not(.is-unavailable) .home-push-icon svg {
+  animation: nu-ring 2.8s ease-in-out 1s infinite;
+  transform-origin: 50% 10%;
+}
+
+@keyframes nu-ring {
+  0%, 70%, 100% { rotate: 0deg; }
+  74% { rotate: 14deg; }
+  80% { rotate: -12deg; }
+  86% { rotate: 8deg; }
+  92% { rotate: -4deg; }
+}
+
+/* 푸시 칸이 보이면 새 알림은 두 개까지만 (카드 높이 고정) */
+.home-alerts:has(> .home-push:not([hidden])) .home-feed > li:nth-child(n + 3) {
+  display: none;
+}
+
+.home-feed-empty {
+  padding: 24px 10px;
+  font-size: 14px;
+  color: var(--nu-ink-3);
+}
+
+/* 타일 공통 */
+.home-tile {
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 24px;
+  border-radius: var(--nu-r-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.35s var(--nu-ease), box-shadow 0.35s var(--nu-ease);
+}
+
+.home-tile:hover {
+  transform: translateY(-4px);
+}
+
+.home-tile:active {
+  transform: translateY(-1px) scale(0.99);
+  transition-duration: 0.1s;
+}
+
+.tile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tile-title {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.tile-desc {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #4a495f;
+}
+
+.tile-icon {
+  display: flex;
+}
+
+.tile-act {
+  background: var(--nu-lilac);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), 0 1px 2px rgba(43, 40, 112, 0.08), 0 18px 36px -22px rgba(43, 40, 112, 0.42);
+}
+
+.tile-act:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), 0 2px 4px rgba(43, 40, 112, 0.1), 0 28px 48px -24px rgba(43, 40, 112, 0.5);
+}
+
+.tile-act .tile-desc { color: var(--nu-ink-2); }
+
+.tile-res {
+  background: #ffffff;
+  border: 1px solid var(--nu-line);
+  box-shadow: var(--nu-shadow-card);
+}
+
+.tile-res:hover,
+.tile-evt:hover {
+  box-shadow: var(--nu-shadow-card-hover);
+}
+
+.tile-evt {
+  background: var(--nu-gray);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), var(--nu-shadow-card);
+}
+
+/* 예산 (메탈) */
+.tile-budget {
+  isolation: isolate;
+  padding: 30px 32px 32px;
+  background: var(--nu-metal);
+  color: #ffffff;
+  box-shadow: var(--nu-shadow-metal);
+}
+
+.tile-budget:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 4px 8px rgba(23, 22, 63, 0.2), 0 40px 70px -28px rgba(23, 22, 63, 0.8);
+}
+
+.tile-budget::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 38%, rgba(255, 255, 255, 0) 60%);
+}
+
+/* 올렸을 때 금속 위로 빛이 한 번 지나간다. */
+.tile-budget-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.2) 50%, transparent 65%);
+  transform: translateX(-110%);
+  transition: transform 0.9s var(--nu-ease);
+}
+
+.tile-budget:hover .tile-budget-shine {
+  transform: translateX(110%);
+}
+
+.tile-budget > .tile-icon,
+.tile-budget > .tile-bottom,
+.tile-budget > .portal-card-badge,
+.tile-budget > .portal-card-lock {
+  z-index: 3;
+}
+
+.tile-budget > .tile-icon,
+.tile-budget > .tile-bottom {
+  position: relative;
+}
+
+.tile-icon.is-glass,
+.tile-go {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+}
+
+.tile-icon.is-glass {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+}
+
+.tile-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.tile-title.is-metal {
+  font-size: 34px;
+  letter-spacing: -0.02em;
+  background: linear-gradient(180deg, #ffffff 0%, #e4e5f7 42%, #aeb0da 58%, #f4f4ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.tile-budget .tile-desc {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.tile-go {
+  width: 54px;
+  height: 54px;
+  border-radius: 27px;
+  display: flex;
+  flex-shrink: 0;
+  transition: transform 0.35s var(--nu-ease), background-color 0.25s ease;
+}
+
+.tile-budget:hover .tile-go {
+  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* 캘린더 (PC: 오늘 날짜를 크게) */
+.tile-cal {
+  padding: 26px;
+  color: #ffffff;
+  background: linear-gradient(160deg, #27264a 0%, #16152b 55%, #0e0d1f 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 2px 4px rgba(15, 14, 32, 0.2), 0 24px 48px -24px rgba(15, 14, 32, 0.62);
+}
+
+.tile-cal-date {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.tile-cal-date b {
+  font-size: 64px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.tile-cal-date > span {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  line-height: 1.35;
+  color: #c9c8e0;
+}
+
+.tile-cal-icon,
+.tile-cal-desc {
+  display: none;
+}
+
+/* 잠금 · 새 소식 표시 (portalAuth.js 가 붙인다) */
+.home-tile .portal-card-badge,
+.home-tile .portal-card-lock {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  height: 26px;
+  padding: 0 11px;
+  border-radius: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+  animation: nu-badge-pop 0.35s var(--nu-spring) both;
+}
+
+.home-tile .portal-card-badge {
+  background: var(--nu-alert);
+  color: #ffffff;
+}
+
+.tile-budget .portal-card-badge {
+  background: #ffffff;
+  color: var(--nu-accent);
+}
+
+.home-tile .portal-card-lock {
+  background: rgba(22, 21, 43, 0.06);
+  color: var(--nu-ink-2);
+}
+
+.tile-budget .portal-card-lock {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+}
+
+.home-tile.is-locked {
+  cursor: pointer;
+}
+
+/* 아래 */
+.home-footer {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid #e6e7ee;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--nu-ink-3);
+}
+
+.home-footer a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+  color: var(--nu-ink-2);
+}
+
+.home-footer a:hover {
+  color: var(--nu-accent);
+}
+
+.home-footer a[hidden] {
+  display: none;
+}
+
+.home-built {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.home-built img {
+  width: 24px;
+  height: 32px;
+  object-fit: contain;
+}
+
+@media (max-width: 860px) {
+  /* ---------- 홈 ---------- */
+  .home-shell {
+    padding: 0 0 8px;
+  }
+
+  .nu main.home-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    gap: 12px;
+    padding: 0 20px;
+  }
+
+  .home-hero,
+  .home-alerts,
+  .tile-budget,
+  .tile-cal,
+  .tile-act,
+  .tile-res,
+  .tile-evt {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .home-hero {
+    grid-column: 1 / -1;
+    margin: 0 -20px 8px;
+    padding: 20px 24px 26px;
+    border-radius: 0 0 32px 32px;
+    box-shadow: none;
+  }
+
+  .home-wave {
+    top: 63px;
+    right: -41px;
+    width: 310px;
+    opacity: 0.5;
+  }
+
+  .home-title {
+    margin-top: 64px;
+    font-size: 46px;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    text-shadow: none;
+  }
+
+  .home-sub {
+    margin-top: 8px;
+    font-size: 17px;
+  }
+
+  .home-desc {
+    margin-top: 4px;
+    max-width: 180px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .home-greeting {
+    display: block;
+    align-self: flex-start;
+    margin: 18px 0 0;
+    padding: 7px 12px;
+    border-radius: 14px;
+    background: #ffffff;
+    font-size: 13px;
+    color: #2e2b55;
+  }
+
+  .home-hero .nu-profile-pill {
+    display: none;
+  }
+
+  .home-alerts {
+    display: none;
+  }
+
+  /* 모바일: 새 알림 카드 대신 머리 바로 아래 '푸시 알림' 띠만 보인다 */
+  .home-alerts:has(> .home-push:not([hidden])) {
+    grid-column: 1 / -1;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    display: flex;
+  }
+
+  .home-alerts:has(> .home-push:not([hidden])) > :not(.home-push) {
+    display: none;
+  }
+
+  .home-push {
+    margin: 0;
+    width: 100%;
+    padding: 10px 10px 10px 12px;
+    box-sizing: border-box;
+    border: 1px solid var(--nu-line);
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(22, 21, 43, 0.04), 0 12px 24px -20px rgba(22, 21, 43, 0.35);
+  }
+
+  .home-push .home-push-icon {
+    background: var(--nu-lavender);
+  }
+
+  .home-tile {
+    min-height: 148px;
+    padding: 18px;
+    border-radius: 24px;
+  }
+
+  .tile-budget {
+    grid-column: 1 / -1;
+    order: 0;
+    min-height: 136px;
+    padding: 18px 20px;
+    background: var(--nu-accent);
+    box-shadow: 0 18px 36px -22px rgba(43, 40, 112, 0.6);
+  }
+
+  .tile-budget::before,
+  .tile-budget-ghost,
+  .tile-budget-shine {
+    display: none;
+  }
+
+  .tile-icon.is-glass {
+    align-self: flex-start;
+    width: auto;
+    height: auto;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .tile-title.is-metal {
+    font-size: 21px;
+    background: none;
+    color: #ffffff;
+  }
+
+  .tile-budget .tile-desc {
+    font-size: 13px;
+    color: #d9d8f5;
+  }
+
+  .tile-go {
+    display: none;
+  }
+
+  .tile-act { order: 1; }
+  .tile-res { order: 2; }
+  .tile-cal { order: 3; }
+  .tile-evt { order: 4; background: var(--nu-lilac); }
+  .tile-evt .tile-desc { color: var(--nu-ink-2); }
+
+  .tile-title {
+    font-size: 18px;
+  }
+
+  .tile-desc {
+    font-size: 12px;
+  }
+
+  /* 캘린더 타일은 모바일에서 회색 타일 */
+  .tile-cal {
+    color: var(--nu-ink);
+    background: var(--nu-gray);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), var(--nu-shadow-card);
+  }
+
+  .tile-cal-date {
+    display: none;
+  }
+
+  .tile-cal-icon,
+  .tile-cal-desc {
+    display: flex;
+  }
+
+  .tile-cal-prefix {
+    display: none;
+  }
+
+  .home-tile .portal-card-badge,
+  .home-tile .portal-card-lock {
+    top: 16px;
+    right: 16px;
+    height: 24px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .home-footer {
+    margin: 14px 20px 0;
+    padding-top: 0;
+    border-top: 0;
+    font-size: 12px;
+  }
+
+  .home-built img {
+    width: 22px;
+    height: 29px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-push .home-push-icon svg {
+    animation: none !important;
+  }
+}
